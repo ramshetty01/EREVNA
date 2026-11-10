@@ -29,6 +29,11 @@ def test_bundled_flow_cache_history_and_validation(tmp_path, monkeypatch):
     app.button(key="FormSubmitter:research_form-Start research").click().run()
     assert not app.session_state.cache_notice
     assert len(app.session_state.runs) == 2
+    app.number_input[0].set_value(2).run()
+    app.button(key="FormSubmitter:research_form-Start research").click().run()
+    assert not app.session_state.cache_notice
+    assert app.session_state.selected_run["metrics"]["max_llm_calls"] == 2
+    assert len(app.session_state.runs) == 3
     app.text_input[0].set_value(" ")
     app.button(key="FormSubmitter:research_form-Start research").click().run()
     assert not app.exception

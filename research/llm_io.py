@@ -10,7 +10,16 @@ class ResearchError(Exception):
     """Safe user-facing failure without provider payloads or credentials."""
 
 
+class BudgetExceeded(ResearchError):
+    """No additional model call is allowed for this run."""
+
+
 def invoke(llm, messages: list, metrics: RunMetrics) -> str:
+    if metrics.llm_calls >= metrics.max_llm_calls:
+        metrics.call_budget_exhausted = True
+        raise BudgetExceeded(
+            "Model-call budget exhausted. Increase the run limit or simplify the request."
+        )
     metrics.llm_calls += 1
     try:
         response = llm.invoke(messages)

@@ -95,6 +95,8 @@ class RunMetrics(BaseModel):
     output_tokens: int = 0
     usage_complete: bool = True
     llm_calls: int = 0
+    max_llm_calls: int = Field(default=10, ge=1, le=10)
+    call_budget_exhausted: bool = False
     estimated_cost_usd: float | None = None
     source_count: int = 0
     passage_count: int = 0

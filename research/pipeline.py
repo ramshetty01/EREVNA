@@ -10,6 +10,7 @@ from agents.demo_agents import demo_planner
 from agents.llm_backend import get_llm, get_mode, model_name
 from agents.plan_schema import ResearchPlan
 from agents.search_agent import search_agent
+from research.budgets import resolve_call_limit
 from research.citations import check_answer, render_report
 from research.llm_io import ResearchError
 from research.llm_io import structured as _structured
@@ -47,6 +48,7 @@ def run_research(
     k: int = 8,
     llm=None,
     verify_support: bool = True,
+    max_llm_calls: int | None = None,
     progress: Callable[[str], None] | None = None,
 ) -> ResearchResult:
     query = query.strip()
@@ -61,7 +63,10 @@ def run_research(
     start = time.perf_counter()
     mode = get_mode()
     metrics = RunMetrics(
-        provider=mode, model=model_name(), support_verification_requested=verify_support
+        provider=mode,
+        model=model_name(),
+        support_verification_requested=verify_support,
+        max_llm_calls=resolve_call_limit(max_llm_calls),
     )
     warnings = []
     if mode != "demo" and llm is None:
@@ -214,6 +219,8 @@ def run_research(
             )
         metrics.step_seconds["verify_support"] = round(time.perf_counter() - tick, 3)
         metrics.accepted_findings = len(answer.findings)
+        if metrics.call_budget_exhausted:
+            warnings.append("Model-call budget exhausted; no further model requests were sent.")
         report = render_report(
             query, answer, passages, demo=mode == "demo", support_review=support_review
         )

@@ -11,6 +11,7 @@ import streamlit as st
 from agents.llm_backend import get_mode, mode_label, model_name
 from agents.memory_agent import MemoryAgent
 from agents.plan_schema import format_plan
+from research.budgets import resolve_call_limit
 from research.models import Document, ResearchResult
 from research.pipeline import ResearchError, run_research
 from tools.web_search import scrape_page
@@ -59,6 +60,15 @@ with st.sidebar:
     st.caption(
         "Uses extra model calls to check each claim against its evidence. Model judgments can still be wrong."
     )
+    try:
+        call_ceiling = resolve_call_limit()
+    except ValueError as exc:
+        st.error(str(exc))
+        st.stop()
+    max_llm_calls = st.number_input(
+        "Maximum model calls", min_value=1, max_value=call_ceiling, value=call_ceiling, step=1
+    )
+    st.caption("Includes generation, retries and claim review. A low limit can leave no verified findings.")
     st.divider()
     st.caption(mode_label())
     st.caption("Saved results expire after 24 hours and are isolated to this browser session.")
@@ -113,7 +123,8 @@ if submitted:
             context = hashlib.sha256(
                 json.dumps(
                     [
-                        "pipeline-v0.3-support-v1",
+                        "pipeline-v0.4-budgets",
+                        max_llm_calls,
                         verify_support,
                         source_mode,
                         urls_text,
@@ -156,6 +167,7 @@ if submitted:
                         documents=documents,
                         retrieval=method,
                         verify_support=verify_support,
+                        max_llm_calls=max_llm_calls,
                         progress=lambda stage: st.write(stage),
                     )
                     status.update(label="Research complete", state="complete", expanded=False)
