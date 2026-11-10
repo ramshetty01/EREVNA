@@ -1,6 +1,6 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
-from tools.web_search import search_web, scrape_page
+from tools.web_search import scrape_page, search_web
 
 
 def test_search_web_returns_results_on_success():
@@ -20,7 +20,8 @@ def test_search_web_returns_error_dict_on_failure():
         results = search_web("test query")
 
     assert len(results) == 1
-    assert "network down" in results[0]["body"]
+    assert "unavailable" in results[0]["body"]
+    assert "network down" not in results[0]["body"]
 
 
 def test_scrape_page_returns_empty_for_blank_url():

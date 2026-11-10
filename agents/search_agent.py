@@ -1,13 +1,14 @@
+"""Plan-aware search retaining source text for passage retrieval."""
+
+from concurrent.futures import ThreadPoolExecutor
+
 from agents.plan_schema import ResearchPlan
-from tools.web_search import search_web, scrape_page
+from tools.web_search import scrape_page, search_web
 
 
 def _search_queries(query: str, plan: ResearchPlan | None) -> list[str]:
-    """Build search queries from the user task and planner output."""
-    queries = [query]
-    if plan:
-        queries.extend(plan.key_questions[:3])
-    seen = set()
+    queries = [query] + (plan.key_questions[:3] if plan else [])
+    seen: set[str] = set()
     unique = []
     for q in queries:
         normalized = q.strip().lower()
@@ -18,43 +19,44 @@ def _search_queries(query: str, plan: ResearchPlan | None) -> list[str]:
 
 
 def search_agent(query: str, plan: ResearchPlan | None = None) -> dict:
-    """Multi-source search driven by the research plan."""
-    results = {
-        "query": query,
-        "plan_objective": plan.objective if plan else query,
-        "search_queries": [],
-        "web_results": [],
-        "raw_content": "",
-    }
-
-    seen_urls: set[str] = set()
-    for search_query in _search_queries(query, plan):
-        results["search_queries"].append(search_query)
-        for hit in search_web(search_query, max_results=3):
+    queries = _search_queries(query, plan)[:2]
+    hits = []
+    seen = set()
+    warnings = []
+    for search_query in queries:
+        for hit in search_web(search_query, max_results=4):
             url = hit.get("href", "")
-            if not url or url in seen_urls:
+            if not url:
+                warnings.append("Web search was unavailable for a query.")
                 continue
-            seen_urls.add(url)
-
-            snippet = hit.get("body", "")
-            page_content = scrape_page(url)
-            content = page_content or snippet
-
-            if content:
-                results["web_results"].append({
-                    "url": url,
-                    "title": hit.get("title", ""),
-                    "search_query": search_query,
-                    "snippet": content[:500],
-                })
-
-            if len(results["web_results"]) >= 8:
-                break
-        if len(results["web_results"]) >= 8:
-            break
-
-    results["raw_content"] = "\n\n".join(
-        f"[{r['title']}] ({r['url']})\n{r['snippet']}"
-        for r in results["web_results"]
-    )
-    return results
+            if url in seen:
+                continue
+            seen.add(url)
+            hits.append((hit, search_query))
+    hits = hits[:6]
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        pages = list(pool.map(lambda pair: scrape_page(pair[0]["href"]), hits))
+    results = []
+    for (hit, search_query), page in zip(hits, pages, strict=True):
+        text = page or hit.get("body", "")
+        if not text:
+            continue
+        results.append(
+            {
+                "url": hit["href"],
+                "title": hit.get("title") or hit["href"],
+                "search_query": search_query,
+                "snippet": text[:500],
+                "text": text,
+                "status": "page" if page else "snippet",
+            }
+        )
+        if not page:
+            warnings.append(f"Only a search snippet was available for {hit['href']}.")
+    return {
+        "query": query,
+        "search_queries": queries,
+        "web_results": results,
+        "raw_content": "\n\n".join(f"[{r['title']}] ({r['url']})\n{r['text']}" for r in results),
+        "warnings": list(dict.fromkeys(warnings)),
+    }
