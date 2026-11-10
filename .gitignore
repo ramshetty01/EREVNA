@@ -8,3 +8,11 @@ logs/
 *.db
 .cache/
 models/
+
+.env.*
+!.env.example
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+artifacts/

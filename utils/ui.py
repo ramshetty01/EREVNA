@@ -13,7 +13,8 @@ QUICK_ACTIONS = [
 
 
 def inject_styles() -> None:
-    st.markdown("""
+    st.markdown(
+        """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Söhne-style,Inter,system-ui,sans-serif');
 
@@ -326,30 +327,38 @@ def inject_styles() -> None:
             border-radius: 999px !important;
         }
     </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_greeting(has_results: bool) -> None:
     if has_results:
         return
-    st.markdown("""
+    st.markdown(
+        """
     <div class="greeting-wrap">
         <p class="greeting-text">Ready when you are.</p>
         <p class="greeting-sub">Multi-agent research · plan · search · analyze · report</p>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_mode_badge(mode: str, label: str) -> None:
     dot_class = "demo" if mode == "demo" else ""
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div style="text-align:center;">
         <span class="mode-badge">
             <span class="mode-dot {dot_class}"></span>
             {html.escape(label)}
         </span>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_quick_actions() -> None:
@@ -390,22 +399,28 @@ def render_search_results(search_results: dict) -> None:
         url = html.escape(r.get("url", ""))
         raw = r.get("snippet", "")
         snippet = html.escape(raw[:220])
-        st.markdown(f"""
+        st.markdown(
+            f"""
         <div class="source-card">
             <div class="source-title">{title}</div>
             <div class="source-url">{url}</div>
-            <div class="source-snippet">{snippet}{'…' if len(raw) > 220 else ''}</div>
+            <div class="source-snippet">{snippet}{"…" if len(raw) > 220 else ""}</div>
         </div>
-        """, unsafe_allow_html=True)
+        """,
+            unsafe_allow_html=True,
+        )
 
 
 def render_cache_prompt(cached_task: str) -> None:
     safe = html.escape(cached_task)
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="cache-banner">
         Similar research found — <em>{safe}</em>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_sidebar(history: list, mode_label: str) -> None:
@@ -418,7 +433,9 @@ def render_sidebar(history: list, mode_label: str) -> None:
             st.session_state.query_input = ""
             st.rerun()
 
-        st.markdown(f'<p class="sidebar-title">{html.escape(mode_label)}</p>', unsafe_allow_html=True)
+        st.markdown(
+            f'<p class="sidebar-title">{html.escape(mode_label)}</p>', unsafe_allow_html=True
+        )
         st.markdown("---")
 
         if not history:

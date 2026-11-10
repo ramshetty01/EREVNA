@@ -1,13 +1,13 @@
 from pydantic import BaseModel, Field
-from typing import List
 
 
 class ResearchPlan(BaseModel):
     """Structured research plan with Pydantic validation."""
+
     objective: str = Field(description="Clear research objective")
-    steps: List[str] = Field(description="Ordered research steps")
-    expected_sources: List[str] = Field(description="Types of sources to target")
-    key_questions: List[str] = Field(description="Key questions to answer")
+    steps: list[str] = Field(description="Ordered research steps")
+    expected_sources: list[str] = Field(description="Types of sources to target")
+    key_questions: list[str] = Field(description="Key questions to answer")
 
 
 def format_plan(plan: ResearchPlan) -> str:

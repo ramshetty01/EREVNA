@@ -11,3 +11,6 @@ logs
 models
 .env
 
+
+.env.*
+artifacts
