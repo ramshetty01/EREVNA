@@ -1,9 +1,16 @@
 # EREVNA
 
-**Evidence-backed research with inspectable passages, citations and run metrics.**
+**Evidence-backed research with passage retrieval, citation checks and inspectable claim reviews.**
 
-Ask a question, retrieve relevant passages, generate findings with supporting quotes,
-and inspect the evidence behind each finding. Runs through a Streamlit app or REST API.
+Ask a question, retrieve source passages and inspect the evidence behind each finding through a Streamlit UI, FastAPI service or CLI.
+
+[![CI](https://github.com/ramshetty01/EREVNA/actions/workflows/ci.yml/badge.svg)](https://github.com/ramshetty01/EREVNA/actions/workflows/ci.yml)
+
+**Stack:** Python · Streamlit · FastAPI · Pydantic · SQLite · optional Sentence Transformers.
+
+**Status:** Tested local application. Model-based support review is fallible; public multi-user deployment remains future work.
+
+[Project brief](docs/PROJECT_BRIEF.md) · [Technical portfolio](https://github.com/ramshetty01/ramshetty01/blob/main/PROJECT_PORTFOLIO.md) · [Issues](https://github.com/ramshetty01/EREVNA/issues)
 
 ![EREVNA research interface](docs/images/research-desktop.png)
 
@@ -20,9 +27,6 @@ and inspect the evidence behind each finding. Runs through a Streamlit app or RE
 - Session-scoped SQLite cache with 24-hour freshness and retained evidence.
 - API input limits, bearer authentication, concurrency bounds and private-network fetch protection.
 - Offline development evaluation, unit/integration/UI tests and CI.
-
-**Status:** working local portfolio prototype. Not a deployed multi-user production service.
-Citation checks establish traceability; they do **not** independently prove claim support or truth.
 
 ## Run locally
 
