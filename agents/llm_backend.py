@@ -29,7 +29,7 @@ def is_demo_mode() -> bool:
 
 def model_name() -> str:
     return {
-        "nvidia": os.getenv("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct"),
+        "nvidia": os.getenv("NVIDIA_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b"),
         "openai": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
         "ollama": os.getenv("OLLAMA_MODEL", "llama3.2"),
         "demo": "extractive-demo",
@@ -58,6 +58,9 @@ def get_llm():
             max_tokens=2400,
             timeout=60,
             max_retries=1,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}}
+            if mode == "nvidia"
+            else {},
         )
     if mode == "ollama":
         from langchain_ollama import ChatOllama
