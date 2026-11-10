@@ -13,7 +13,7 @@ from research.llm_io import BudgetExceeded
 from research.models import Document, ResearchResult
 from research.pipeline import ResearchError, run_research
 
-app = FastAPI(title="EREVNA Research API", version="0.4.0")
+app = FastAPI(title="EREVNA Research API", version="0.5.0")
 slots = threading.BoundedSemaphore(2)
 
 
@@ -42,7 +42,7 @@ async def limit_body(request: Request, call_next):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "0.4.0"}
+    return {"status": "ok", "version": "0.5.0"}
 
 
 @app.post("/research", response_model=ResearchResult)

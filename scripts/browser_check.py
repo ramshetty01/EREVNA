@@ -10,6 +10,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:8501")
     parser.add_argument("--output", type=Path, default=Path("artifacts/browser"))
+    parser.add_argument("--retrieval", choices=["bm25", "dense", "hybrid"], default="bm25")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
@@ -17,6 +18,9 @@ def main():
         page = browser.new_page(viewport={"width": 1440, "height": 1100})
         page.goto(args.url, wait_until="networkidle")
         page.get_by_role("button", name="Start research").wait_for(timeout=20_000)
+        if args.retrieval != "bm25":
+            page.get_by_role("combobox", name="Retrieval method").click()
+            page.get_by_role("option", name=args.retrieval, exact=True).click()
         page.screenshot(path=str(args.output / "home.png"), full_page=True)
         page.get_by_role("button", name="Start research").click()
         page.get_by_role("button", name="Download report").wait_for(timeout=180_000)
