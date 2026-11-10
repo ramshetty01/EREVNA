@@ -37,3 +37,9 @@ docker-build:
 smoke:
 	$(PYTHON) -m compileall -q agents tools utils research app.py
 
+
+support-evaluate:
+	$(PYTHON) -m research.evaluate_support
+
+support-live-evaluate:
+	$(PYTHON) -m research.evaluate_support --live --limit 16 --workers 2 --output artifacts/support-live-evaluation.json --review-template artifacts/support-human-review.csv

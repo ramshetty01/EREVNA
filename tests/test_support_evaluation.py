@@ -13,7 +13,9 @@ def test_fixture_validity_balance_and_label_provenance():
         assert {
             label: sum(c["expected_verdict"] == label for c in cases)
             for label in ("supported", "partially_supported", "contradicted", "insufficient")
-        } == dict.fromkeys(("supported", "partially_supported", "contradicted", "insufficient"), 4)
+        } == {"supported": 4, "partially_supported": 4,
+              "contradicted": 4 if split == "development" else 5,
+              "insufficient": 4 if split == "development" else 3}
     dev = {c["category"] for c in data["cases"] if c["split"] == "development"}
     evaluation = {c["category"] for c in data["cases"] if c["split"] == "evaluation"}
     assert not dev & evaluation

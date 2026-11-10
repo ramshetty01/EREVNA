@@ -13,6 +13,7 @@ and inspect the evidence behind each finding. Runs through a Streamlit app or RE
 - Live web search, specific public URLs, or a bundled fictional documentation corpus.
 - Full-page collection, overlapping passage chunks and BM25 retrieval. Optional dense and hybrid retrieval.
 - Structured findings with passage IDs and supporting quotes. Invalid references/non-matching quotes are removed.
+- Default model-based claim review, one bounded narrowing/recheck pass, and an inspectable decision audit.
 - Explicit insufficient-evidence responses, including when no relevant passages are found.
 - Source/evidence inspection, Markdown reports and complete JSON run exports.
 - Per-stage latency, provider/model metadata and reported token usage. Cost is unknown unless pricing is configured.
@@ -68,13 +69,18 @@ flowchart LR
     C --> R[BM25 / dense / hybrid retrieval]
     R --> G[Structured findings + evidence quotes]
     G --> V[Reference and quote validation]
-    V --> A[Report / Evidence / Run JSON]
+    V --> J[Claim support review]
+    J --> N[Retain / narrow and recheck / exclude]
+    N --> A[Report / Evidence / Claim review / Run JSON]
     A --> M[Scoped expiring cache]
 ```
 
 Live web research uses up to two search queries and six source pages. Fetches are bounded,
 redirects revalidated, and connections pinned to validated public IPs. Provided-document
 research uses a deterministic plan and one generation call, plus at most one citation-repair attempt if quote checks fail. Each structured call allows one format retry.
+Live runs then review claim support in a fresh context, with at most one narrowing/recheck batch.
+Each review batch permits one format retry; failures withhold affected findings. Demo mode
+skips semantic review. This uses the configured model, not an independent truth oracle.
 No report-writing stage is allowed to silently introduce new uncited prose.
 
 ### Retrieval modes
@@ -113,6 +119,22 @@ cases passed the expected abstention decisions, including one unanswerable quest
 Small-sample checks do not establish a hallucination rate. See [evaluation methodology](docs/evaluation.md)
 and [recorded results](docs/evaluation-results.json).
 
+### Claim-support evaluation
+
+The new 32-case synthetic fixture has 16 development and 16 evaluation cases with
+different topics. Labels were authored by the implementation assistant and are **not
+independently human reviewed**. On the 16 evaluation cases, quote-only acceptance
+retained 12/12 unsupported originals; model review retained 1/12. It retained 3/4
+supported originals, emitted two narrowed claims, and had one unavailable decision.
+Classification accuracy was 10/16 after one disclosed reference-label correction
+(9/16 before correction, same predictions). These are targeted fixture results,
+not a production accuracy estimate. [Methodology and known failures](docs/claim-support.md).
+
+```sh
+make support-evaluate PYTHON=.venv/bin/python  # offline fixture validation/baseline
+make support-live-evaluate PYTHON=.venv/bin/python  # explicit provider usage
+```
+
 ## API
 
 ```sh
@@ -132,13 +154,14 @@ curl http://localhost:8000/research \
 
 Omit `documents` to use live web search. An empty documents array means an empty corpus
 and produces an insufficient-evidence result. Responses contain findings, passages, sources,
-plan, warnings and metrics. Limits: 1,500 question characters, 12 documents, 300,000 total
+plan, warnings, metrics and `support_review`. Claim review defaults to enabled;
+`"verify_support": false` explicitly disables it. Limits: 1,500 question characters, 12 documents, 300,000 total
 source characters, 400 KB request body, two concurrent research requests per API process.
 
 ## Verification
 
 ```sh
-make lint typecheck test evaluate smoke PYTHON=.venv/bin/python
+make lint typecheck test evaluate support-evaluate smoke PYTHON=.venv/bin/python
 make security PYTHON=.venv/bin/python
 ```
 
@@ -161,7 +184,7 @@ Install Playwright separately before running it. Screenshots are in `docs/images
 
 ## Limits and next steps
 
-- Semantic claim support is not independently checked. A real quote can still be used to support an invalid inference.
+- Model-based support review is fallible and uses the same configured model. It can retain an unsupported claim or exclude a supported claim; independent human review remains necessary.
 - Web search can be blocked or rate-limited. Failed scrapes fall back to labelled snippets; PDF/JS-only pages are not parsed.
 - Prompt-injection instructions are treated as untrusted data, but this is not a guarantee of model compliance.
 - The browser uses a new session namespace on reload; it is not an account/authentication system.

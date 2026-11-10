@@ -49,3 +49,8 @@ are excluded from Git unless explicitly copied into public documentation.
 - `make test`, `make evaluate`: offline regression checks; no provider requests.
 - `make live-evaluate`: three explicit provider requests, subject to parser retries.
 - Unknown pricing stays unknown. Set both input/output USD-per-million prices only for your model.
+
+Claim-support review is enabled by default for live runs. Budget for up to four
+additional model calls per run (review and optional narrowing recheck, each allowing
+one format retry). The cache context includes verification settings and pipeline
+version. Review failures withhold affected findings and remain visible in the audit.

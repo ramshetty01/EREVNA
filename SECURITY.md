@@ -14,3 +14,8 @@ This is a local portfolio prototype, not an audited multi-user service.
 - Quote validation is not semantic proof and cannot guarantee protection from hallucinations or prompt injection.
 
 Report security issues privately to the repository owner. Do not attach credentials, personal data or private source documents to public issues.
+
+Model-based claim review is an additional fallible filter, not a security boundary
+or proof of factual truth. It uses the configured generation model in a fresh context;
+source prompt injection and verdict/reason inconsistencies remain possible. Inspect
+the claim audit and independently review consequential outputs.

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 — Claim support review
+
+- Add default fresh-context support judgments after quote validation, with bounded narrowing and recheck.
+- Withhold findings when review fails; expose decisions, reasons and usage in UI/API/Markdown exports.
+- Separate cache entries by verification settings and preserve legacy result compatibility.
+- Add 32 synthetic reference-labelled cases, blind human-review export and recorded NVIDIA comparison with disclosed annotation correction and failure cases.
+
 ## 0.2.0 — Grounded research prototype
 
 - Add NVIDIA NIM support and test an available Nemotron model.

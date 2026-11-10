@@ -38,6 +38,9 @@ jobs:
           name: retrieval-evaluation
           path: artifacts/retrieval-evaluation.json
 
+      - name: Offline claim-support fixture validation
+        run: make support-evaluate
+
       - name: Security audit
         run: make security
 

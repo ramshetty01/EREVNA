@@ -47,3 +47,10 @@ span occurs in the cited passage; it cannot prove the claim logically follows fr
 5. Grade every factual claim as supported, unsupported or contradictory. Record citation completeness separately.
 6. Measure abstention precision/recall, p50/p95 latency, usage and failure categories over enough runs.
 7. Publish negative examples and retrieval/generation ablations, not just successful screenshots.
+
+## Claim-support review (0.3)
+
+The 0.2 generation checks above predate the semantic review gate. The separate
+[claim-support evaluation](claim-support.md) measures original-claim acceptance,
+retention and classification on 16 synthetic evaluation cases, with full label
+provenance, a post-run annotation correction and known failures disclosed.
