@@ -59,7 +59,34 @@ For Ollama, set `LLM_PROVIDER=ollama` and `OLLAMA_MODEL` to a model you have ins
 For OpenAI, set `LLM_PROVIDER=openai` and `OPENAI_API_KEY`. These adapters are implemented;
 the recorded live checks in this release used NVIDIA.
 
+## Command line
+
+```sh
+# Offline bundled example; no model usage even if .env contains a key:
+python -m research "How does Harbor check citations?" --format markdown
+# Explicit live model usage with your own document array:
+python -m research "When does the cache expire?" --live \
+  --documents documents.json --max-llm-calls 4 --output run.json
+# Explicit web search plus configured model:
+python -m research "Your question" --web --live --format markdown
+```
+
+Document JSON is an array of `{title, url, text}` objects, or an object with a
+`documents` array. The default output is full run JSON. Add `--no-support-review`
+only to explicitly disable semantic review.
+
+## Runtime limits
+
+`EREVNA_MAX_LLM_CALLS` sets an operator ceiling from 1 to 10 (default 10). The UI,
+API `max_llm_calls`, and CLI `--max-llm-calls` can lower it. All active-pipeline model
+calls count, including failed calls and format retries. OpenAI-compatible SDK retries
+are disabled. When the limit prevents support review, unreviewed findings are withheld.
+This bounds application model invocations, not dollars, total tokens, wall-clock time
+or distributed usage. [Configuration and failure behavior](docs/configuration.md).
+
 ## Research flow
+
+[Architecture and failure boundaries](docs/architecture.md).
 
 ```mermaid
 flowchart LR
@@ -171,6 +198,8 @@ Install Playwright separately before running it. Screenshots are in `docs/images
 
 ## Files
 
+- `research/__main__.py`: offline-by-default CLI and explicit live runs
+- `research/budgets.py`: operator and caller model-call limits
 - `research/pipeline.py`: shared orchestration and usage metrics
 - `research/models.py`: validated source, passage, answer and run contracts
 - `research/retrieval.py`: chunking, BM25, dense and hybrid search
@@ -192,4 +221,4 @@ Install Playwright separately before running it. Screenshots are in `docs/images
 - Dense/hybrid quality, public deployment, larger human-reviewed evaluation and production load testing remain future work.
 - The old individual analyst/report helpers remain for compatibility; the app and API use `research.pipeline`.
 
-[Deployment notes](docs/deployment.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
+[Remaining roadmap](docs/roadmap.md) · [Deployment notes](docs/deployment.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)

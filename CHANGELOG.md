@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 — Runtime limits and CLI
+
+- Enforce a per-run model-call ceiling across planning, generation, format retries, citation repair and support review; callers can lower the operator limit.
+- Disable hidden OpenAI-compatible SDK retries so application call accounting is not bypassed.
+- Add an offline-by-default command-line interface with document input, live opt-in and JSON/Markdown output.
+- Expose call limits in the UI/API, isolate cached runs by limit, and test concurrent API overflow and recovery.
+
 ## 0.3.0 — Claim support review
 
 - Add default fresh-context support judgments after quote validation, with bounded narrowing and recheck.

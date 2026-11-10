@@ -43,3 +43,6 @@ support-evaluate:
 
 support-live-evaluate:
 	$(PYTHON) -m research.evaluate_support --live --limit 16 --workers 2 --output artifacts/support-live-evaluation.json --review-template artifacts/support-human-review.csv
+
+cli-demo:
+	$(PYTHON) -m research "How does Harbor check citations?" --format markdown
