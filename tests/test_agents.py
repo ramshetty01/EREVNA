@@ -1,8 +1,8 @@
-import pytest
+import numpy as np
 
+from agents.memory_agent import MemoryAgent
 from agents.plan_schema import ResearchPlan, format_plan
 from agents.search_agent import _search_queries
-from agents.memory_agent import MemoryAgent
 
 
 def test_format_plan_renders_all_sections():
@@ -45,7 +45,12 @@ def test_search_queries_deduplicates():
 
 def test_memory_agent_finds_similar_task(tmp_path):
     db_path = tmp_path / "test_memory.db"
-    memory = MemoryAgent(db_path=str(db_path))
+
+    class Encoder:
+        def encode(self, text):
+            return np.array([1.0, 0.0])
+
+    memory = MemoryAgent(db_path=str(db_path), encoder=Encoder())
 
     memory.save(
         "Latest trends in AI agent frameworks",
