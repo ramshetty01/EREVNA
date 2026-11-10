@@ -25,6 +25,10 @@ def test_bundled_flow_cache_history_and_validation(tmp_path, monkeypatch):
     assert not app.exception
     assert app.session_state.cache_notice is True
     assert len(app.session_state.runs) == 1
+    app.checkbox[1].uncheck().run()
+    app.button(key="FormSubmitter:research_form-Start research").click().run()
+    assert not app.session_state.cache_notice
+    assert len(app.session_state.runs) == 2
     app.text_input[0].set_value(" ")
     app.button(key="FormSubmitter:research_form-Start research").click().run()
     assert not app.exception

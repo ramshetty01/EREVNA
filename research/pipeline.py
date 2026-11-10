@@ -206,6 +206,12 @@ def run_research(
             )
             metrics.support_assessment = "A fresh-context model review checks claim support; this is fallible and not independent human verification."
         metrics.support_review_status = support_review.status
+        if support_review.status == "no_findings":
+            metrics.support_assessment = "No findings were available for claim-support review."
+        elif support_review.status == "failed":
+            metrics.support_assessment = (
+                "Claim-support verification failed; findings were withheld."
+            )
         metrics.step_seconds["verify_support"] = round(time.perf_counter() - tick, 3)
         metrics.accepted_findings = len(answer.findings)
         report = render_report(

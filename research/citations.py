@@ -49,9 +49,14 @@ def render_report(
     if demo:
         lines += ["> Extractive demo: source excerpts only; no AI synthesis.", ""]
     if answer.insufficient_evidence:
+        explanation = (
+            "Claim-support verification could not be completed. Findings were withheld; retry the run."
+            if support_review and support_review.status == "failed"
+            else "The retrieved evidence does not support a reliable answer. Try a narrower question or provide better sources."
+        )
         lines += [
             "## Evidence insufficient",
-            "The retrieved evidence does not support a reliable answer. Try a narrower question or provide better sources.",
+            explanation,
             "",
         ]
     else:
