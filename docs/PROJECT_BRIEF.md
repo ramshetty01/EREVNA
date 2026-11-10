@@ -47,7 +47,8 @@ pipeline with multiple model passes, not an autonomous team of independent agent
 
 Sources and reports may contain private information; full JSON includes source text.
 Local SQLite records expire for lookup after 24 hours and are purged after 30 days on
-writes. Reloading the browser creates a new namespace. There is no cross-device identity.
+writes. Session history can be logically deleted from the sidebar without deleting other
+sessions; a configurable DB location and schema version guard support maintenance. Reloading the browser creates a new namespace. There is no cross-device identity.
 Provider secrets stay outside Git/Docker. Public fetches validate destination addresses
 and redirects, but production network policy still requires infrastructure enforcement.
 
@@ -57,7 +58,7 @@ transport retries are disabled for OpenAI-compatible providers to preserve accou
 
 ## Verification and measured results
 
-- 83 tests pass, plus Ruff/mypy and optional-environment dependency audit.
+- 87 tests pass, plus Ruff/mypy and optional-environment dependency audit.
 - Live NVIDIA CLI generation and support review completed within two model calls.
 - Fresh-process browser flow covers evidence/audit inspection, downloads and mobile layout;
   hybrid mode has also been exercised with the real local embedding model.

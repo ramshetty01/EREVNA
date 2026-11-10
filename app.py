@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 import uuid
 from pathlib import Path
 from typing import Any
@@ -76,6 +77,18 @@ with st.sidebar:
         st.session_state.selected_run = None
         st.session_state.cache_notice = False
     if st.session_state.runs:
+        if st.button("Delete session history", key="delete_session_history", use_container_width=True):
+            try:
+                MemoryAgent(
+                    os.getenv("EREVNA_CACHE_DB", str(ROOT / "database/memory.db")),
+                    namespace=st.session_state.session_id,
+                ).clear()
+                st.session_state.runs = []
+                st.session_state.selected_run = None
+                st.session_state.cache_notice = False
+                st.success("This session’s saved history was deleted.")
+            except Exception:
+                st.error("History could not be deleted. Check local cache access and retry.")
         st.markdown("#### Recent research")
         for item in reversed(st.session_state.runs[-10:]):
             if st.button(
@@ -139,7 +152,7 @@ if submitted:
                 ).encode()
             ).hexdigest()
             memory = MemoryAgent(
-                str(ROOT / "database/memory.db"), namespace=st.session_state.session_id
+                os.getenv("EREVNA_CACHE_DB", str(ROOT / "database/memory.db")), namespace=st.session_state.session_id
             )
             cached = None if fresh else memory.get_similar(question, context=context)
             if cached and cached.get("payload"):
