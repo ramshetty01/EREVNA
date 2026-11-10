@@ -54,3 +54,12 @@ Claim-support review is enabled by default for live runs. Budget for up to four
 additional model calls per run (review and optional narrowing recheck, each allowing
 one format retry). The cache context includes verification settings and pipeline
 version. Review failures withhold affected findings and remain visible in the audit.
+
+## Per-run model-call limits
+
+Set `EREVNA_MAX_LLM_CALLS` (1–10, default 10) in the operator environment. Requests
+can lower the ceiling; they cannot raise it. The limit includes failed invocations
+and format retries. OpenAI-compatible SDK transport retries are disabled so they do
+not bypass this accounting. Budget exhaustion can withhold generated findings when
+review has not completed. See [configuration](configuration.md) for API/CLI behavior
+and the limits of this control. It is not a dollar cap or multi-user quota.

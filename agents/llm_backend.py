@@ -57,7 +57,7 @@ def get_llm():
             temperature=0,
             max_completion_tokens=2400,
             timeout=60,
-            max_retries=1,
+            max_retries=0,
             extra_body={"chat_template_kwargs": {"enable_thinking": False}}
             if mode == "nvidia"
             else {},

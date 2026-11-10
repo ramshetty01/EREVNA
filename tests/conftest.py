@@ -15,5 +15,6 @@ def isolated_provider(monkeypatch):
         "OLLAMA_MODEL",
         "INPUT_USD_PER_MILLION",
         "OUTPUT_USD_PER_MILLION",
+        "EREVNA_MAX_LLM_CALLS",
     ):
         monkeypatch.delenv(key, raising=False)

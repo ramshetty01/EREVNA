@@ -9,10 +9,11 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from research.llm_io import BudgetExceeded
 from research.models import Document, ResearchResult
 from research.pipeline import ResearchError, run_research
 
-app = FastAPI(title="EREVNA Research API", version="0.3.0")
+app = FastAPI(title="EREVNA Research API", version="0.4.0")
 slots = threading.BoundedSemaphore(2)
 
 
@@ -22,6 +23,7 @@ class ResearchRequest(BaseModel):
     retrieval: Literal["bm25", "dense", "hybrid"] = "bm25"
     k: int = Field(default=8, ge=1, le=12)
     verify_support: bool = True
+    max_llm_calls: int | None = Field(default=None, ge=1, le=10, strict=True)
 
 
 @app.middleware("http")
@@ -40,7 +42,7 @@ async def limit_body(request: Request, call_next):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "0.3.0"}
+    return {"status": "ok", "version": "0.4.0"}
 
 
 @app.post("/research", response_model=ResearchResult)
@@ -53,7 +55,9 @@ def research(request: ResearchRequest, authorization: Annotated[str | None, Head
     elif not local:
         raise HTTPException(503, "Configure EREVNA_API_TOKEN or enable localhost-only mode.")
     if not slots.acquire(blocking=False):
-        raise HTTPException(429, "Two runs are already active. Retry shortly.")
+        raise HTTPException(
+            429, "Two runs are already active. Retry shortly.", headers={"Retry-After": "5"}
+        )
     try:
         return run_research(
             request.query,
@@ -61,9 +65,12 @@ def research(request: ResearchRequest, authorization: Annotated[str | None, Head
             retrieval=request.retrieval,
             k=request.k,
             verify_support=request.verify_support,
+            max_llm_calls=request.max_llm_calls,
         )
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from None
+    except BudgetExceeded as exc:
+        raise HTTPException(422, str(exc)) from None
     except ResearchError as exc:
         raise HTTPException(502, str(exc)) from None
     finally:
