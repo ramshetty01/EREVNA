@@ -1,115 +1,172 @@
 # EREVNA
 
-> An agentic research assistant with structured planning, web retrieval, grounded report generation, and semantic session memory.
+**Evidence-backed research with inspectable passages, citations and run metrics.**
 
-[![CI](https://github.com/ramshetty01/EREVNA/actions/workflows/ci.yml/badge.svg)](https://github.com/ramshetty01/EREVNA/actions/workflows/ci.yml)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+Ask a question, retrieve relevant passages, generate findings with supporting quotes,
+and inspect the evidence behind each finding. Runs through a Streamlit app or REST API.
 
-## Live Demo
+![EREVNA research interface](docs/images/research-desktop.png)
 
-Deploy to [Streamlit Community Cloud](https://share.streamlit.io/) in one click:
+## What works
 
-1. Fork this repo
-2. Go to [share.streamlit.io](https://share.streamlit.io/) → **New app**
-3. Set **Main file path** to `app.py`
-4. Add `OPENAI_API_KEY` under **Secrets**
-5. Deploy
+- NVIDIA NIM generation, with explicit provider selection; OpenAI, Ollama and extractive demo adapters.
+- Live web search, specific public URLs, or a bundled fictional documentation corpus.
+- Full-page collection, overlapping passage chunks and BM25 retrieval. Optional dense and hybrid retrieval.
+- Structured findings with passage IDs and supporting quotes. Invalid references/non-matching quotes are removed.
+- Explicit insufficient-evidence responses, including when no relevant passages are found.
+- Source/evidence inspection, Markdown reports and complete JSON run exports.
+- Per-stage latency, provider/model metadata and reported token usage. Cost is unknown unless pricing is configured.
+- Session-scoped SQLite cache with 24-hour freshness and retained evidence.
+- API input limits, bearer authentication, concurrency bounds and private-network fetch protection.
+- Offline development evaluation, unit/integration/UI tests and CI.
 
-Or run locally ( **no API key required** — Demo Mode works out of the box):
+**Status:** working local portfolio prototype. Not a deployed multi-user production service.
+Citation checks establish traceability; they do **not** independently prove claim support or truth.
 
-```bash
+## Run locally
+
+Python **3.12** is the tested runtime.
+
+```sh
 git clone https://github.com/ramshetty01/EREVNA.git
 cd EREVNA
-pip install -r requirements.txt
+python3.12 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.lock
 cp .env.example .env
-streamlit run app.py
+streamlit run app.py --server.address=127.0.0.1
 ```
 
-## AI Backend Options
+Open http://localhost:8501. The default configuration is an extractive demo with no
+model calls. Choose **Bundled example** to run without live search or a downloaded model.
+It uses fictional Harbor product docs, clearly labelled in the interface.
 
-| Mode | Cost | Setup |
-|------|------|-------|
-| **Demo** (default) | Free | Leave `OPENAI_API_KEY` blank — uses templates + live web search |
-| **OpenAI** | Paid | Set `OPENAI_API_KEY` in `.env` |
-| **Ollama** | Free | Install [Ollama](https://ollama.com), run `ollama pull llama3.2`, set `OLLAMA_MODEL=llama3.2` in `.env` |
+For NVIDIA, edit the ignored `.env` locally:
 
-## Architecture
-
-```
-User Query
-    ↓
-Planner Agent   (LangChain + Pydantic structured output)
-    ↓  plan steps & key questions feed downstream agents
-Search Agent    (DuckDuckGo API + BeautifulSoup page scraper)
-    ↓
-Analyst Agent   (GPT-4o-mini, plan-aware analysis)
-    ↓
-Report Agent    (Structured markdown report)
-    ↓
-Memory Agent    (SQLite + SentenceTransformer cosine similarity)
+```dotenv
+LLM_PROVIDER=nvidia
+NVIDIA_API_KEY=<your-own-key>
+NVIDIA_MODEL=nvidia/nemotron-3.5-lightning-30b-a3b
 ```
 
-## Features
+NVIDIA's hosted catalogue changes. The model above was tested during this implementation;
+choose an available model if it is later retired. The NVIDIA adapter sends credentials only
+to `https://integrate.api.nvidia.com/v1`. `.env` is excluded from Git and Docker builds.
+Never put keys into issues, README examples, screenshots or commits.
 
-- **Plan-driven research** — Search and analysis use the planner's key questions, not just the raw query
-- **Semantic memory** — Similar past sessions are detected via embeddings; choose cached report or fresh research
-- **Multi-source search** — DuckDuckGo results enriched with page scraping
-- **Structured outputs** — Pydantic-validated research plans via LangChain
-- **Report export** — Download results as markdown
-- **Run history** — Sidebar with past sessions
-- **JSONL logging** — Per-day agent run logs for debugging
+For Ollama, set `LLM_PROVIDER=ollama` and `OLLAMA_MODEL` to a model you have installed.
+For OpenAI, set `LLM_PROVIDER=openai` and `OPENAI_API_KEY`. These adapters are implemented;
+the recorded live checks in this release used NVIDIA.
 
-## Project Structure
+## Research flow
 
-```
-├── app.py                     # Streamlit UI (pipeline orchestration)
-├── agents/
-│   ├── plan_schema.py         # Pydantic models (testable without API key)
-│   ├── planner_agent.py       # LangChain plan generation
-│   ├── search_agent.py        # Plan-driven multi-source search
-│   ├── analyst_agent.py       # Plan-aware LLM analysis
-│   ├── report_agent.py        # Report generation
-│   └── memory_agent.py        # Semantic memory (SQLite + embeddings)
-├── tools/
-│   └── web_search.py          # DuckDuckGo + page scraper
-├── utils/
-│   └── logger.py              # JSONL agent run logger
-├── tests/                     # pytest suite
-└── .github/workflows/ci.yml   # GitHub Actions CI
+```mermaid
+flowchart LR
+    Q[Question] --> P[Plan]
+    P --> S[Web search / URLs / provided corpus]
+    S --> C[Full text and passage chunks]
+    C --> R[BM25 / dense / hybrid retrieval]
+    R --> G[Structured findings + evidence quotes]
+    G --> V[Reference and quote validation]
+    V --> A[Report / Evidence / Run JSON]
+    A --> M[Scoped expiring cache]
 ```
 
-## Skills Demonstrated
+Live web research uses up to two search queries and six source pages. Fetches are bounded,
+redirects revalidated, and connections pinned to validated public IPs. Provided-document
+research uses a deterministic plan and one generation call (with at most one format retry).
+No report-writing stage is allowed to silently introduce new uncited prose.
 
-| Skill | Where |
-|-------|-------|
-| Python + Type Hints | All agents |
-| LangChain Chains + Prompt Templates | planner, analyst, report agents |
-| Pydantic v2 Validation | `planner_agent.py` |
-| Pipeline Orchestration | `app.py` |
-| NLP Embeddings (Sentence-BERT) | `memory_agent.py` |
-| SQLite Persistence | `memory_agent.py` |
-| Web Scraping (BeautifulSoup) | `search_agent.py`, `web_search.py` |
-| Streamlit UI | `app.py` |
-| Testing (pytest) | `tests/` |
-| CI/CD (GitHub Actions) | `.github/workflows/ci.yml` |
+### Retrieval modes
 
-## Testing
+BM25 is available in the default installation, with no model download.
 
-```bash
-pytest tests/ -v
+```sh
+pip install -r requirements-semantic.txt
+python -m research.evaluate --method dense --output artifacts/dense-evaluation.json
+python -m research.evaluate --method hybrid --output artifacts/hybrid-evaluation.json
 ```
 
-## Environment Variables
+Dense retrieval uses `sentence-transformers/all-MiniLM-L6-v2`; hybrid uses reciprocal-rank
+fusion. Installation and first use download the model. Ranking/fusion contracts are tested
+with fixed embeddings; the committed numerical results cover BM25 only, not dense/hybrid.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENAI_API_KEY` | Yes | OpenAI API key for GPT-4o-mini |
+## Evaluation — scope matters
 
-## Author
+```sh
+make evaluate PYTHON=.venv/bin/python
+# Explicitly calls the configured provider on three cases:
+make live-evaluate PYTHON=.venv/bin/python
+```
 
-**ramshetty01** — [GitHub](https://github.com/ramshetty01)
+The development set has **50 authored cases over fictional docs**: 40 answerable and
+10 unanswerable. It deliberately includes long navigation prefixes to test the previous
+500-character truncation. It is not a held-out benchmark or an estimate of real-world accuracy.
 
-## License
+| Retrieval | Source recall@3 | Mean reciprocal rank |
+|---|---:|---:|
+| First 500 characters + BM25 | 0.55 | 0.5333 |
+| Full passages + BM25 | 1.00 | 0.9875 |
 
-MIT — see [LICENSE](LICENSE).
+These metrics measure source retrieval, **not answer correctness**. Three recorded NVIDIA
+cases passed the expected abstention decisions, including one unanswerable question.
+Small-sample checks do not establish a hallucination rate. See [evaluation methodology](docs/evaluation.md)
+and [recorded results](docs/evaluation-results.json).
+
+## API
+
+```sh
+# Local machine only. Do not use this setting on a public bind address.
+EREVNA_API_LOCAL=1 .venv/bin/python -m uvicorn research.api:app --host 127.0.0.1 --port 8000
+```
+
+Health: `GET /health`. Interactive API schema: http://localhost:8000/docs.
+For shared deployments set `EREVNA_API_TOKEN` and send `Authorization: Bearer <token>`.
+Without a token or explicit local mode, `/research` rejects requests.
+
+```sh
+curl http://localhost:8000/research \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"When does the cache expire?","documents":[{"title":"Cache policy","url":"https://example.org/cache","text":"Cache entries expire after 24 hours."}],"retrieval":"bm25"}'
+```
+
+Omit `documents` to use live web search. An empty documents array means an empty corpus
+and produces an insufficient-evidence result. Responses contain findings, passages, sources,
+plan, warnings and metrics. Limits: 1,500 question characters, 12 documents, 300,000 total
+source characters, 400 KB request body, two concurrent research requests per API process.
+
+## Verification
+
+```sh
+make lint typecheck test evaluate smoke PYTHON=.venv/bin/python
+make security PYTHON=.venv/bin/python
+```
+
+Tests use isolated credentials and mocked model calls; they do not spend API credits.
+The browser test script in `scripts/browser_check.py` is an explicit optional live smoke test.
+Install Playwright separately before running it. Screenshots are in `docs/images`.
+
+## Files
+
+- `research/pipeline.py`: shared orchestration and usage metrics
+- `research/models.py`: validated source, passage, answer and run contracts
+- `research/retrieval.py`: chunking, BM25, dense and hybrid search
+- `research/citations.py`: reference/quote checks and deterministic rendering
+- `research/api.py`: REST endpoints and request controls
+- `research/evaluate.py`: offline evaluation and explicit bounded live checks
+- `agents/memory_agent.py`: scoped, expiring report cache
+- `tools/web_search.py`: search and bounded public-page fetching
+- `app.py`: Streamlit presentation
+- `data/development_set.json`: authored regression fixture
+
+## Limits and next steps
+
+- Semantic claim support is not independently checked. A real quote can still be used to support an invalid inference.
+- Web search can be blocked or rate-limited. Failed scrapes fall back to labelled snippets; PDF/JS-only pages are not parsed.
+- Prompt-injection instructions are treated as untrusted data, but this is not a guarantee of model compliance.
+- The browser uses a new session namespace on reload; it is not an account/authentication system.
+- Multi-user deployment needs authentication, per-user quotas, external persistence and an enforced network egress policy.
+- Dense/hybrid quality, public deployment, larger human-reviewed evaluation and production load testing remain future work.
+- The old individual analyst/report helpers remain for compatibility; the app and API use `research.pipeline`.
+
+[Deployment notes](docs/deployment.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)

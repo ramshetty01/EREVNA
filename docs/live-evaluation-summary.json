@@ -1,0 +1,162 @@
+{
+  "scope": "Abstention and reference/quote checks are measured. Human claim-support and answer-correctness grading are still required.",
+  "dataset_sha256": "70aad80b1340cc55d774046df03f5a217b373ff227c5109b95251d81cee35472",
+  "cases": [
+    {
+      "case_id": "dev-001",
+      "expected_answerable": true,
+      "abstention_correct": true,
+      "created_at": "2026-11-10T20:20:23.315269+00:00",
+      "query": "Which HTTP codes trigger Harbor retries?",
+      "answer": {
+        "findings": [
+          {
+            "claim": "Harbor retries transient HTTP 429 and 503 failures at most three times.",
+            "evidence": [
+              {
+                "passage_id": "S1-P1",
+                "quote": "Harbor retries transient HTTP 429 and 503 failures at most three times."
+              }
+            ]
+          },
+          {
+            "claim": "Retry delays use exponential backoff with jitter.",
+            "evidence": [
+              {
+                "passage_id": "S1-P1",
+                "quote": "Retry delays use exponential backoff with jitter."
+              }
+            ]
+          },
+          {
+            "claim": "A Retry-After header takes precedence over the calculated delay.",
+            "evidence": [
+              {
+                "passage_id": "S1-P1",
+                "quote": "A Retry-After header takes precedence over the calculated delay."
+              }
+            ]
+          },
+          {
+            "claim": "Authentication failures are never retried.",
+            "evidence": [
+              {
+                "passage_id": "S1-P1",
+                "quote": "Authentication failures are never retried."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "Source S1-P1 does not specify which HTTP codes beyond 429 and 503 trigger retries."
+        ],
+        "insufficient_evidence": false
+      },
+      "metrics": {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "step_seconds": {
+          "plan": 0.0,
+          "collect": 0.0,
+          "retrieve": 0.0,
+          "generate_and_check": 3.926,
+          "total": 4.28
+        },
+        "input_tokens": 2250,
+        "output_tokens": 310,
+        "usage_complete": true,
+        "llm_calls": 1,
+        "estimated_cost_usd": null,
+        "source_count": 10,
+        "passage_count": 8,
+        "candidate_findings": 4,
+        "accepted_findings": 4,
+        "rejected_findings": 0,
+        "citation_references_valid": true,
+        "support_assessment": "Exact quote matching only; claim entailment is not independently verified."
+      }
+    },
+    {
+      "case_id": "dev-002",
+      "expected_answerable": true,
+      "abstention_correct": true,
+      "created_at": "2026-11-10T20:20:25.071543+00:00",
+      "query": "How many times does Harbor retry a failed request?",
+      "answer": {
+        "findings": [
+          {
+            "claim": "Harbor retries transient HTTP 429 and 503 failures at most three times.",
+            "evidence": [
+              {
+                "passage_id": "S1-P1",
+                "quote": "Harbor retries transient HTTP 429 and 503 failures at most three times."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "The retry policy documentation does not specify behavior for non-transient failures beyond authentication failures being excluded."
+        ],
+        "insufficient_evidence": false
+      },
+      "metrics": {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "step_seconds": {
+          "plan": 0.0,
+          "collect": 0.0,
+          "retrieve": 0.0,
+          "generate_and_check": 1.755,
+          "total": 1.756
+        },
+        "input_tokens": 2424,
+        "output_tokens": 130,
+        "usage_complete": true,
+        "llm_calls": 1,
+        "estimated_cost_usd": null,
+        "source_count": 10,
+        "passage_count": 8,
+        "candidate_findings": 1,
+        "accepted_findings": 1,
+        "rejected_findings": 0,
+        "citation_references_valid": true,
+        "support_assessment": "Exact quote matching only; claim entailment is not independently verified."
+      }
+    },
+    {
+      "case_id": "dev-041",
+      "expected_answerable": false,
+      "abstention_correct": true,
+      "created_at": "2026-11-10T20:20:25.977539+00:00",
+      "query": "What is Harbor annual subscription pricing?",
+      "answer": {
+        "findings": [],
+        "limitations": [],
+        "insufficient_evidence": true
+      },
+      "metrics": {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "step_seconds": {
+          "plan": 0.0,
+          "collect": 0.0,
+          "retrieve": 0.001,
+          "generate_and_check": 0.902,
+          "total": 0.905
+        },
+        "input_tokens": 2249,
+        "output_tokens": 25,
+        "usage_complete": true,
+        "llm_calls": 1,
+        "estimated_cost_usd": null,
+        "source_count": 10,
+        "passage_count": 8,
+        "candidate_findings": 0,
+        "accepted_findings": 0,
+        "rejected_findings": 0,
+        "citation_references_valid": true,
+        "support_assessment": "Exact quote matching only; claim entailment is not independently verified."
+      }
+    }
+  ]
+}

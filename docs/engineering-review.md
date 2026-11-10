@@ -1,3 +1,5 @@
+> Historical pre-upgrade review. Several items below have since been implemented; see README and CHANGELOG for current status.
+
 # EREVNA Engineering Review
 
 Date: 2026-07-31
