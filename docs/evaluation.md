@@ -33,7 +33,9 @@ run records provider/model, token counts, stage latency, source passages, struct
 and quote-validation counts. `live-evaluation-summary.json` contains the recorded summary.
 
 This run tests basic answerability/abstention and reference plumbing. It does NOT independently
-score claim entailment or answer correctness. Automatic quote matching verifies a verbatim
+score claim entailment or answer correctness. A bounded citation-repair pass can retry generation once when quote checks reject findings. Initial/final rejection counts and repair attempts are included in metrics.
+
+Automatic quote matching verifies a verbatim
 span occurs in the cited passage; it cannot prove the claim logically follows from the span.
 
 ## Recommended next evaluation

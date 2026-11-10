@@ -74,7 +74,7 @@ flowchart LR
 
 Live web research uses up to two search queries and six source pages. Fetches are bounded,
 redirects revalidated, and connections pinned to validated public IPs. Provided-document
-research uses a deterministic plan and one generation call (with at most one format retry).
+research uses a deterministic plan and one generation call, plus at most one citation-repair attempt if quote checks fail. Each structured call allows one format retry.
 No report-writing stage is allowed to silently introduce new uncited prose.
 
 ### Retrieval modes

@@ -18,8 +18,7 @@ docker build -t erevna:local .
 docker run --rm -p 127.0.0.1:8501:8501 --env-file .env erevna:local
 ```
 
-The container uses Python 3.12 and exposes a Streamlit health check. Docker build/run was
-not part of the local validation on this workstation; CI has a Docker build job.
+The container uses Python 3.12 and exposes a Streamlit health check. The Docker image was built locally and by the GitHub CI Docker job. A local container health check is included in verification.
 
 ## API
 

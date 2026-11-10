@@ -64,6 +64,8 @@ class RunMetrics(BaseModel):
     candidate_findings: int = 0
     accepted_findings: int = 0
     rejected_findings: int = 0
+    initial_rejected_findings: int = 0
+    citation_repair_attempts: int = 0
     citation_references_valid: bool = True
     support_assessment: str = (
         "Exact quote matching only; claim entailment is not independently verified."
