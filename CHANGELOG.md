@@ -2,6 +2,8 @@
 
 ## 0.5.0 — Reusable retrieval and semantic benchmark
 
+- Add session-scoped history deletion, configurable cache storage and serialized schema migration/version checks.
+
 - Reuse corpus statistics and embeddings across evaluation questions; reuse a pinned CPU encoder across requests without sharing document indexes.
 - Compare BM25, dense and reciprocal-rank hybrid retrieval with dataset/model/code provenance, setup/query timing and unanswerable retrieval counts.
 - Validate embedding dimensions and finite values; make hybrid score ties deterministic by passage ID.

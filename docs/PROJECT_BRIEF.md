@@ -6,9 +6,8 @@ Repository: https://github.com/ramshetty01/EREVNA
 
 Turn a question and source documents into findings whose quotations and model-based
 support judgments can be inspected. This is a tested local portfolio application with
-UI, API and CLI, not a certified or deployed multi-user production service. The 0.3
-claim-review work is merged; runtime-budget and retrieval follow-ups are in PRs #37
-and #38 respectively at the time of this brief. Confirm their current state on GitHub.
+UI, API and CLI, not a certified or deployed multi-user production service. Claim review, runtime budgets, retrieval benchmarks and cache lifecycle controls are
+merged through PRs #36, #37, #38 and #40. Confirm later changes on GitHub.
 
 ## Actual technology stack
 

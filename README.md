@@ -61,6 +61,8 @@ the recorded live checks in this release used NVIDIA.
 
 ## Command line
 
+[Python API, CLI and cache examples](docs/examples.md).
+
 ```sh
 # Offline bundled example; no model usage even if .env contains a key:
 python -m research "How does Harbor check citations?" --format markdown
