@@ -46,3 +46,9 @@ support-live-evaluate:
 
 cli-demo:
 	$(PYTHON) -m research "How does Harbor check citations?" --format markdown
+
+setup-semantic:
+	$(PYTHON) -m pip install -r requirements-semantic.lock
+
+semantic-evaluate:
+	$(PYTHON) -m research.evaluate --method all --output artifacts/semantic-retrieval-evaluation.json

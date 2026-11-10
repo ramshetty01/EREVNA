@@ -49,3 +49,9 @@ reasons so a reviewer can inspect failures.
 The API semaphore and call ceilings are local process/run controls. They do not
 provide account identity, per-user daily quotas, distributed concurrency limits or
 a whole-run cancellation deadline. See [roadmap](roadmap.md) for remaining work.
+
+Retrieval now uses a corpus-local index that precomputes lexical statistics and, for
+dense/hybrid modes, passage vectors. Evaluation reuses it across questions. A normal
+research run creates its own index; document vectors are not cached across sessions.
+Only the fixed CPU embedding model is reused across requests, with synchronized first
+load and a pinned revision. No document content is passed to a hosted embedding API.

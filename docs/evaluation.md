@@ -54,3 +54,10 @@ The 0.2 generation checks above predate the semantic review gate. The separate
 [claim-support evaluation](claim-support.md) measures original-claim acceptance,
 retention and classification on 16 synthetic evaluation cases, with full label
 provenance, a post-run annotation correction and known failures disclosed.
+
+## Semantic retrieval comparison (0.5)
+
+[Protocol and results](retrieval-benchmark.md) now compare BM25, dense and hybrid on
+the same authored corpus, with setup/query timing, pinned model revision and per-case
+rankings. This closes the local implementation benchmark gap, not the independent
+held-out evaluation requirement above.
