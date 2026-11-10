@@ -40,7 +40,7 @@ def public_address(url: str) -> tuple[str, str, int, str]:
     if port not in (80, 443):
         raise ValueError("Only standard web ports are allowed")
     addresses = socket.getaddrinfo(parsed.hostname, port, type=socket.SOCK_STREAM)
-    ips = [a[4][0] for a in addresses]
+    ips = [str(a[4][0]) for a in addresses]
     if not ips or any(not ipaddress.ip_address(ip).is_global for ip in ips):
         raise ValueError("Private, loopback and reserved addresses are blocked")
     return parsed.scheme, parsed.hostname, port, ips[0]
@@ -57,6 +57,7 @@ def scrape_page(url: str, max_chars: int = 24_000) -> str:
             headers = {**HEADERS, "Host": host}
             # Connect to the validated IP, preserving TLS SNI/hostname validation.
             # No second DNS lookup and no environment proxy is involved.
+            pool: urllib3.HTTPConnectionPool
             if scheme == "https":
                 pool = urllib3.HTTPSConnectionPool(
                     ip, port, server_hostname=host, assert_hostname=host

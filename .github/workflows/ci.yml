@@ -14,9 +14,9 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: pip
-          cache-dependency-path: requirements.txt
+          cache-dependency-path: requirements.lock
 
       - name: Install dependencies
         run: make setup
@@ -29,6 +29,14 @@ jobs:
 
       - name: Test
         run: make test
+
+      - name: Offline retrieval evaluation
+        run: make evaluate
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-evaluation
+          path: artifacts/retrieval-evaluation.json
 
       - name: Security audit
         run: make security

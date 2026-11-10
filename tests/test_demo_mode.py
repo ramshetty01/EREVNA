@@ -1,4 +1,4 @@
-from agents.demo_agents import demo_planner, demo_analyst, demo_report
+from agents.demo_agents import demo_analyst, demo_planner, demo_report
 from agents.llm_backend import get_mode, is_demo_mode
 
 

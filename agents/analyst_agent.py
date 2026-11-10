@@ -1,14 +1,16 @@
 import json
-from typing import Union
 
 from langchain_core.prompts import ChatPromptTemplate
 
-from agents.plan_schema import ResearchPlan, format_plan
-from agents.llm_backend import get_mode, get_llm
 from agents.demo_agents import demo_analyst
+from agents.llm_backend import get_llm, get_mode
+from agents.plan_schema import ResearchPlan, format_plan
 
-PROMPT = ChatPromptTemplate.from_messages([
-    ("system", """You are an expert AI Research Analyst.
+PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are an expert AI Research Analyst.
 Analyze the research data and return a structured markdown report with:
 ## Summary
 ## Key Trends
@@ -16,21 +18,21 @@ Analyze the research data and return a structured markdown report with:
 ## Data Gaps & Limitations
 ## Conclusion
 Be precise, cite specific data points, avoid generic statements.
-Use the research plan to stay focused on the objective and key questions."""),
-    ("human", "Research plan:\n{plan}\n\nCollected data:\n\n{data}")
-])
+Use the research plan to stay focused on the objective and key questions.""",
+        ),
+        ("human", "Research plan:\n{plan}\n\nCollected data:\n\n{data}"),
+    ]
+)
 
 
 def analyst_agent(
-    data: Union[dict, str],
+    data: dict | str,
     plan: ResearchPlan | None = None,
     task: str = "",
 ) -> str:
     """Analyze research data using plan context and a structured LangChain chain."""
     raw = (
-        data.get("raw_content", json.dumps(data, indent=2))
-        if isinstance(data, dict)
-        else str(data)
+        data.get("raw_content", json.dumps(data, indent=2)) if isinstance(data, dict) else str(data)
     )
     source_count = len(data.get("web_results", [])) if isinstance(data, dict) else 0
     query = task or (data.get("query", "") if isinstance(data, dict) else "")

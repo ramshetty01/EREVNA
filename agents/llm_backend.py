@@ -55,7 +55,7 @@ def get_llm():
             api_key=SecretStr(key),
             base_url=base,
             temperature=0,
-            max_tokens=2400,
+            max_completion_tokens=2400,
             timeout=60,
             max_retries=1,
             extra_body={"chat_template_kwargs": {"enable_thinking": False}}
