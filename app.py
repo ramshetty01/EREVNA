@@ -55,6 +55,10 @@ with st.sidebar:
     if method != "bm25":
         st.caption("Dense and hybrid retrieval require the optional local embedding model.")
     fresh = st.checkbox("Run fresh — bypass saved results", value=False)
+    verify_support = st.checkbox("Review claim support", value=True)
+    st.caption(
+        "Uses extra model calls to check each claim against its evidence. Model judgments can still be wrong."
+    )
     st.divider()
     st.caption(mode_label())
     st.caption("Saved results expire after 24 hours and are isolated to this browser session.")
@@ -109,6 +113,8 @@ if submitted:
             context = hashlib.sha256(
                 json.dumps(
                     [
+                        "pipeline-v0.3-support-v1",
+                        verify_support,
                         source_mode,
                         urls_text,
                         method,
@@ -149,6 +155,7 @@ if submitted:
                         question,
                         documents=documents,
                         retrieval=method,
+                        verify_support=verify_support,
                         progress=lambda stage: st.write(stage),
                     )
                     status.update(label="Research complete", state="complete", expanded=False)
@@ -176,8 +183,8 @@ if st.session_state.selected_run:
     c3.metric("Run time", f"{result.metrics.step_seconds.get('total', 0):.1f}s")
     cost = result.metrics.estimated_cost_usd
     c4.metric("Estimated cost", f"${cost:.5f}" if cost is not None else "Not configured")
-    report_tab, evidence_tab, plan_tab, run_tab = st.tabs(
-        ["Report", "Evidence", "Research plan", "Run details"]
+    report_tab, evidence_tab, review_tab, plan_tab, run_tab = st.tabs(
+        ["Report", "Evidence", "Claim review", "Research plan", "Run details"]
     )
     with report_tab:
         for warning in result.warnings:
@@ -202,6 +209,28 @@ if st.session_state.selected_run:
         for doc in result.documents:
             st.write(f"{doc.title} — {doc.status}")
             st.caption(f"Acquired: {doc.fetched_at}")
+    with review_tab:
+        review = result.support_review
+        st.caption(f"Review status: {review.status}. {review.note}")
+        if not review.claims:
+            st.info(
+                "No claim judgments are available for this run. Demo and review-disabled runs do not perform semantic verification."
+            )
+        for item in review.claims:
+            label = item.decision.verdict if item.decision else "unavailable"
+            with st.expander(
+                f"Finding {item.finding_id + 1} · {label} · {item.disposition}", expanded=True
+            ):
+                st.write("Original claim:", item.original.claim)
+                if item.decision:
+                    st.write("Reason:", item.decision.reason)
+                    st.write("Evidence IDs:", ", ".join(item.decision.evidence_ids))
+                if item.final_claim and item.disposition == "narrowed":
+                    st.write("Narrowed claim:", item.final_claim)
+                if item.recheck:
+                    st.write("Recheck:", item.recheck.verdict, "—", item.recheck.reason)
+                if item.error:
+                    st.warning(item.error)
     with plan_tab:
         st.markdown(format_plan(result.plan))
         st.caption(

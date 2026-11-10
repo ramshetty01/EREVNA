@@ -106,7 +106,7 @@ def test_live_pipeline_contract_usage_and_citations(monkeypatch):
                 usage_metadata={"input_tokens": 100, "output_tokens": 50},
             )
 
-    result = run_research("retry requests", documents=corpus(), llm=Model())
+    result = run_research("retry requests", documents=corpus(), llm=Model(), verify_support=False)
     assert result.metrics.accepted_findings == 1
     assert result.metrics.input_tokens == 100
     assert result.metrics.estimated_cost_usd is None

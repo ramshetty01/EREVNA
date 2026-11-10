@@ -3,7 +3,7 @@
 import re
 from urllib.parse import quote as urlquote
 
-from research.models import Finding, GroundedAnswer, Passage
+from research.models import Finding, GroundedAnswer, Passage, SupportReview
 
 
 def normalize(text: str) -> str:
@@ -37,7 +37,12 @@ def plain_markdown(text: str) -> str:
 
 
 def render_report(
-    query: str, answer: GroundedAnswer, passages: list[Passage], *, demo: bool = False
+    query: str,
+    answer: GroundedAnswer,
+    passages: list[Passage],
+    *,
+    demo: bool = False,
+    support_review: SupportReview | None = None,
 ) -> str:
     lookup = {p.id: p for p in passages}
     lines = [f"# {plain_markdown(query)}", ""]
@@ -71,10 +76,39 @@ def render_report(
                 f"> {plain_markdown(evidence.quote)}",
                 "",
             ]
+    if support_review and support_review.claims:
+        lines += [
+            "## Claim-support review",
+            "",
+            "> Automated model judgments, not proof of truth.",
+            "",
+        ]
+        for item in support_review.claims:
+            verdict = item.decision.verdict if item.decision else "unavailable"
+            lines += [
+                f"**Finding {item.finding_id + 1}: {verdict} / {item.disposition}**",
+                f"Original claim: {plain_markdown(item.original.claim)}",
+            ]
+            if item.decision:
+                lines.append(f"Reason: {plain_markdown(item.decision.reason)}")
+            if item.recheck:
+                lines.append(
+                    f"Narrowing recheck: {item.recheck.verdict}. {plain_markdown(item.recheck.reason)}"
+                )
+            if item.error:
+                lines.append(plain_markdown(item.error))
+            lines.append("")
+    assessment = (
+        "Claim support was reviewed in a fresh model context. Model judgments can be wrong and do not verify external truth."
+        if support_review and support_review.status in ("completed", "partial_failure")
+        else "Claim-support verification failed; findings were withheld."
+        if support_review and support_review.status == "failed"
+        else "No model claim-support review was performed. Quote matches alone do not establish logical support."
+    )
     lines += [
         "## Limitations",
         "",
-        "- Citation IDs and quoted text were checked against retrieved passages. This does not independently verify whether every claim follows from its evidence.",
+        "- Citation IDs and quoted text were checked against retrieved passages. " + assessment,
     ]
     lines += [f"- {plain_markdown(item)}" for item in answer.limitations]
     return "\n".join(lines)

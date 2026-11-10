@@ -18,7 +18,7 @@ def test_bundled_flow_cache_history_and_validation(tmp_path, monkeypatch):
     assert not app.exception
     app.button(key="FormSubmitter:research_form-Start research").click().run()
     assert not app.exception
-    assert len(app.tabs) == 4
+    assert len(app.tabs) == 5
     assert "Findings" in app.session_state.selected_run["report"]
     assert app.session_state.selected_run["metrics"]["provider"] == "demo"
     app.button(key="FormSubmitter:research_form-Start research").click().run()

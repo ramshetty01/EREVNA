@@ -50,6 +50,43 @@ class GroundedAnswer(BaseModel):
     insufficient_evidence: bool = False
 
 
+class SupportDecision(BaseModel):
+    """A model judgment, not a guarantee of truth."""
+
+    model_config = {"extra": "forbid"}
+    finding_id: int = Field(ge=0, le=7)
+    verdict: Literal["supported", "partially_supported", "contradicted", "insufficient"]
+    reason: str = Field(min_length=1, max_length=1500)
+    evidence_ids: list[str] = Field(max_length=12)
+    narrowed_claim: str | None = Field(default=None, max_length=2000)
+
+
+class SupportBatch(BaseModel):
+    model_config = {"extra": "forbid"}
+    decisions: list[SupportDecision] = Field(max_length=8)
+
+
+class ClaimReview(BaseModel):
+    finding_id: int
+    original: Finding
+    decision: SupportDecision | None = None
+    recheck: SupportDecision | None = None
+    disposition: Literal["retained", "narrowed", "excluded"] = "excluded"
+    final_claim: str | None = None
+    error: str | None = None
+
+
+class SupportReview(BaseModel):
+    status: Literal["completed", "failed", "partial_failure", "disabled", "demo", "no_findings"] = (
+        "disabled"
+    )
+    prompt_version: str = "claim-support-v1"
+    provider: str = ""
+    model: str = ""
+    claims: list[ClaimReview] = Field(default_factory=list)
+    note: str = "Model judgments can be wrong; human review is still required."
+
+
 class RunMetrics(BaseModel):
     provider: str
     model: str
@@ -70,6 +107,12 @@ class RunMetrics(BaseModel):
     support_assessment: str = (
         "Exact quote matching only; claim entailment is not independently verified."
     )
+    quote_valid_findings: int = 0
+    support_verification_requested: bool = False
+    support_review_status: str = "disabled"
+    support_excluded_findings: int = 0
+    support_narrowed_findings: int = 0
+    support_llm_calls: int = 0
 
 
 class ResearchResult(BaseModel):
@@ -83,3 +126,4 @@ class ResearchResult(BaseModel):
     report: str
     metrics: RunMetrics
     warnings: list[str] = Field(default_factory=list)
+    support_review: SupportReview = Field(default_factory=SupportReview)

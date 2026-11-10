@@ -21,6 +21,7 @@ class ResearchRequest(BaseModel):
     documents: list[Document] | None = Field(default=None, max_length=12)
     retrieval: Literal["bm25", "dense", "hybrid"] = "bm25"
     k: int = Field(default=8, ge=1, le=12)
+    verify_support: bool = True
 
 
 @app.middleware("http")
@@ -55,7 +56,11 @@ def research(request: ResearchRequest, authorization: Annotated[str | None, Head
         raise HTTPException(429, "Two runs are already active. Retry shortly.")
     try:
         return run_research(
-            request.query, documents=request.documents, retrieval=request.retrieval, k=request.k
+            request.query,
+            documents=request.documents,
+            retrieval=request.retrieval,
+            k=request.k,
+            verify_support=request.verify_support,
         )
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from None

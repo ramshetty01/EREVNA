@@ -43,6 +43,7 @@ def test_one_repair_recovers_exact_evidence(monkeypatch):
             )
         ],
         llm=model,
+        verify_support=False,
     )
     assert model.calls == 2
     assert result.metrics.initial_rejected_findings == 1
@@ -87,6 +88,7 @@ def test_invalid_repair_still_abstains(monkeypatch):
             )
         ],
         llm=model,
+        verify_support=False,
     )
     assert model.calls == 2
     assert result.answer.insufficient_evidence
