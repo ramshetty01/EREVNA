@@ -63,3 +63,19 @@ and format retries. OpenAI-compatible SDK transport retries are disabled so they
 not bypass this accounting. Budget exhaustion can withhold generated findings when
 review has not completed. See [configuration](configuration.md) for API/CLI behavior
 and the limits of this control. It is not a dollar cap or multi-user quota.
+
+## Cache deletion and schema upgrades
+
+Set `EREVNA_CACHE_DB` to choose the UI cache location. The sidebar’s **Delete session
+history** action removes SQLite rows only for the current browser namespace and clears
+its in-memory history. Other sessions are not deleted. JSON exports and backups are
+separate copies and are not removed. This is logical deletion, not guaranteed forensic
+erasure of SQLite storage.
+
+The cache uses SQLite `user_version=1`. Startup performs the legacy-column migration
+under a write transaction and refuses newer unknown schemas. Back up the private DB
+before upgrading; restore the matching application version and DB for rollback.
+`MemoryAgent.clear(context=...)` can narrow deletion to a context within its namespace.
+TTL and similarity thresholds must be finite and valid. Default exact-cache regression
+cases cover expected matches, changed quantities/negation, expiry and namespace isolation;
+these do not establish quality for the optional semantic-cache mode.

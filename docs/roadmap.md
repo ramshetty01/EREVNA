@@ -12,6 +12,7 @@ passing these steps does not make the application production-ready automatically
 - [x] CLI with offline default, provided documents and explicit live usage.
 - [x] Operator/request model-call ceilings and cache isolation by budget.
 - [x] Deterministic API concurrency, overflow and failure-recovery tests.
+- [x] Session-scoped history deletion, configurable cache location and schema version guard.
 
 ## Next: evidence quality
 

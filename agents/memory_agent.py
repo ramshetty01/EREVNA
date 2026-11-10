@@ -1,6 +1,7 @@
 """Scoped, expiring SQLite report cache; exact matching needs no model download."""
 
 import json
+import math
 import os
 import sqlite3
 from datetime import UTC, datetime, timedelta
@@ -20,7 +21,13 @@ class MemoryAgent:
         namespace: str = "default",
         ttl_hours: float = 24,
         encoder=None,
+        threshold: float = THRESHOLD,
     ):
+        if not math.isfinite(ttl_hours) or ttl_hours <= 0:
+            raise ValueError("Cache TTL must be a positive finite number of hours.")
+        if not math.isfinite(threshold) or not 0 < threshold <= 1:
+            raise ValueError("Cache threshold must be greater than zero and at most one.")
+        self.threshold = threshold
         self.db_path = db_path
         self.model_name = model_name
         self.namespace = namespace
@@ -39,6 +46,9 @@ class MemoryAgent:
 
     def _init_db(self):
         with sqlite3.connect(self.db_path) as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            if conn.execute("PRAGMA user_version").fetchone()[0] > 1:
+                raise ValueError("Cache schema is newer than this application supports.")
             conn.execute("""CREATE TABLE IF NOT EXISTS memory (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT NOT NULL,
                 report TEXT NOT NULL, embedding TEXT NOT NULL,
@@ -55,6 +65,7 @@ class MemoryAgent:
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS memory_scope ON memory(namespace, context, created_at)"
             )
+            conn.execute("PRAGMA user_version=1")
 
     def save(self, task: str, report: str, *, context: str = "", payload: dict | None = None):
         model = self.model
@@ -76,7 +87,21 @@ class MemoryAgent:
             )
             conn.execute("DELETE FROM memory WHERE created_at < datetime('now', '-30 days')")
 
-    def get_similar(self, query: str, threshold: float = THRESHOLD, *, context: str = ""):
+    def clear(self, *, context: str | None = None) -> int:
+        """Delete only this namespace, optionally narrowed to one context."""
+        with sqlite3.connect(self.db_path) as conn:
+            if context is None:
+                cursor = conn.execute("DELETE FROM memory WHERE namespace=?", (self.namespace,))
+            else:
+                cursor = conn.execute(
+                    "DELETE FROM memory WHERE namespace=? AND context=?", (self.namespace, context)
+                )
+            return cursor.rowcount
+
+    def get_similar(self, query: str, threshold: float | None = None, *, context: str = ""):
+        threshold = self.threshold if threshold is None else threshold
+        if not math.isfinite(threshold) or not 0 < threshold <= 1:
+            raise ValueError("Cache threshold must be greater than zero and at most one.")
         cutoff = (datetime.now(UTC) - timedelta(hours=self.ttl_hours)).strftime("%Y-%m-%d %H:%M:%S")
         with sqlite3.connect(self.db_path) as conn:
             rows = conn.execute(
@@ -99,6 +124,8 @@ class MemoryAgent:
                             / (np.linalg.norm(query_vector) * np.linalg.norm(emb) + 1e-9)
                         )
                 payload = json.loads(payload_str)
+                if not isinstance(payload, dict):
+                    continue
             except (ValueError, TypeError):
                 continue
             if score > best_score:

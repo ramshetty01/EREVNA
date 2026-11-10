@@ -38,3 +38,9 @@ def test_bundled_flow_cache_history_and_validation(tmp_path, monkeypatch):
     app.button(key="FormSubmitter:research_form-Start research").click().run()
     assert not app.exception
     assert app.session_state.selected_run is None
+
+    app.button(key="delete_session_history").click().run()
+    assert not app.exception
+    assert app.session_state.runs == []
+    assert app.session_state.selected_run is None
+    assert not app.session_state.cache_notice
