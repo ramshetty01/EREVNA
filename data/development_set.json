@@ -1,0 +1,447 @@
+{
+  "description": "50 authored development cases over fictional Harbor documentation. Not a held-out or real-world accuracy benchmark. Repeated navigation intentionally tests retrieval beyond the old 500-character cutoff.",
+  "documents": [
+    {
+      "title": "Retry policy",
+      "url": "https://example.org/harbor/retries",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor retries transient HTTP 429 and 503 failures at most three times. Retry delays use exponential backoff with jitter. A Retry-After header takes precedence over the calculated delay. Authentication failures are never retried.",
+      "status": "provided"
+    },
+    {
+      "title": "Report cache",
+      "url": "https://example.org/harbor/cache",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor report cache entries expire after 24 hours. Cached reports are isolated by workspace and model version. A fresh-research option bypasses the cache. Deleting a workspace removes its cached reports.",
+      "status": "provided"
+    },
+    {
+      "title": "Document ingestion",
+      "url": "https://example.org/harbor/ingestion",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor ingests HTML, plain text, and Markdown documents. The upload limit is 10 megabytes per document. Encrypted PDFs and executable files are unsupported. Document ingestion records the source URL and acquisition timestamp.",
+      "status": "provided"
+    },
+    {
+      "title": "Passage retrieval",
+      "url": "https://example.org/harbor/retrieval",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor splits documents into 160-word passages with a 35-word overlap. BM25 is the default retrieval method. Hybrid retrieval combines lexical and dense rankings using reciprocal rank fusion. The default evidence budget is eight passages.",
+      "status": "provided"
+    },
+    {
+      "title": "Citation checks",
+      "url": "https://example.org/harbor/citations",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nEvery Harbor finding must reference an existing passage ID and include a verbatim supporting quotation. Findings with unknown passage IDs are removed. Quote matching checks whether words occur in the passage. It does not prove that a claim logically follows from the quote.",
+      "status": "provided"
+    },
+    {
+      "title": "API access",
+      "url": "https://example.org/harbor/api",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor exposes GET /health without authentication. POST /research requires a bearer token. The research endpoint accepts a question and up to twelve documents. Invalid input returns HTTP 422; missing credentials return HTTP 401.",
+      "status": "provided"
+    },
+    {
+      "title": "Web fetch security",
+      "url": "https://example.org/harbor/security",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor blocks loopback, private, link-local, and reserved IP addresses when fetching web pages. Redirect targets are checked again before connecting. The fetcher pins the validated IP address and verifies the TLS hostname. Only HTTP and HTTPS on standard ports are allowed.",
+      "status": "provided"
+    },
+    {
+      "title": "Run telemetry",
+      "url": "https://example.org/harbor/telemetry",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor records elapsed time per pipeline stage, model identifiers, and input and output token counts. Cost estimates require explicitly configured input and output prices. Missing pricing is displayed as unknown rather than zero. Raw credentials are never written to run traces.",
+      "status": "provided"
+    },
+    {
+      "title": "Deployment guide",
+      "url": "https://example.org/harbor/deployment",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor runs on Python 3.12. The browser application listens on port 8501, while the REST API listens on port 8000. A container health check polls /_stcore/health. Public deployments require authentication and an outbound network policy.",
+      "status": "provided"
+    },
+    {
+      "title": "Data retention",
+      "url": "https://example.org/harbor/retention",
+      "text": "Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. Harbor documentation navigation. Browse the help centre and product guides. \n\nHarbor stores report history for 30 days. Workspace owners can delete their history sooner. Source documents are included only in user-requested exports. Operational logs contain run IDs and aggregate metrics, not full source text.",
+      "status": "provided"
+    }
+  ],
+  "cases": [
+    {
+      "id": "dev-001",
+      "query": "Which HTTP codes trigger Harbor retries?",
+      "relevant_urls": [
+        "https://example.org/harbor/retries"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-002",
+      "query": "How many times does Harbor retry a failed request?",
+      "relevant_urls": [
+        "https://example.org/harbor/retries"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-003",
+      "query": "What delay strategy does Harbor use for retries?",
+      "relevant_urls": [
+        "https://example.org/harbor/retries"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-004",
+      "query": "What takes precedence over the calculated retry delay?",
+      "relevant_urls": [
+        "https://example.org/harbor/retries"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-005",
+      "query": "When do Harbor cached reports expire?",
+      "relevant_urls": [
+        "https://example.org/harbor/cache"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-006",
+      "query": "How are cached reports isolated?",
+      "relevant_urls": [
+        "https://example.org/harbor/cache"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-007",
+      "query": "How can a user bypass the Harbor cache?",
+      "relevant_urls": [
+        "https://example.org/harbor/cache"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-008",
+      "query": "What happens to cached reports when a workspace is deleted?",
+      "relevant_urls": [
+        "https://example.org/harbor/cache"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-009",
+      "query": "Which document formats does Harbor ingest?",
+      "relevant_urls": [
+        "https://example.org/harbor/ingestion"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-010",
+      "query": "What is the document upload limit?",
+      "relevant_urls": [
+        "https://example.org/harbor/ingestion"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-011",
+      "query": "Are encrypted PDFs supported by Harbor ingestion?",
+      "relevant_urls": [
+        "https://example.org/harbor/ingestion"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-012",
+      "query": "Which source metadata does document ingestion record?",
+      "relevant_urls": [
+        "https://example.org/harbor/ingestion"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-013",
+      "query": "What is the Harbor passage size?",
+      "relevant_urls": [
+        "https://example.org/harbor/retrieval"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-014",
+      "query": "How much overlap is used between passages?",
+      "relevant_urls": [
+        "https://example.org/harbor/retrieval"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-015",
+      "query": "How does hybrid retrieval combine rankings?",
+      "relevant_urls": [
+        "https://example.org/harbor/retrieval"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-016",
+      "query": "What is the default evidence passage budget?",
+      "relevant_urls": [
+        "https://example.org/harbor/retrieval"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-017",
+      "query": "What evidence must accompany every finding?",
+      "relevant_urls": [
+        "https://example.org/harbor/citations"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-018",
+      "query": "What happens to unknown passage IDs?",
+      "relevant_urls": [
+        "https://example.org/harbor/citations"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-019",
+      "query": "What does quote matching check?",
+      "relevant_urls": [
+        "https://example.org/harbor/citations"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-020",
+      "query": "Does citation quote matching prove logical support?",
+      "relevant_urls": [
+        "https://example.org/harbor/citations"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-021",
+      "query": "Which Harbor endpoint does not require authentication?",
+      "relevant_urls": [
+        "https://example.org/harbor/api"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-022",
+      "query": "How is the research API authenticated?",
+      "relevant_urls": [
+        "https://example.org/harbor/api"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-023",
+      "query": "How many documents can a research API request contain?",
+      "relevant_urls": [
+        "https://example.org/harbor/api"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-024",
+      "query": "Which HTTP status signals invalid API input?",
+      "relevant_urls": [
+        "https://example.org/harbor/api"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-025",
+      "query": "Which IP ranges are blocked for page fetching?",
+      "relevant_urls": [
+        "https://example.org/harbor/security"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-026",
+      "query": "Are redirect destinations checked?",
+      "relevant_urls": [
+        "https://example.org/harbor/security"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-027",
+      "query": "How does the web fetcher handle DNS rebinding?",
+      "relevant_urls": [
+        "https://example.org/harbor/security"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-028",
+      "query": "Which protocols and ports does the web fetcher allow?",
+      "relevant_urls": [
+        "https://example.org/harbor/security"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-029",
+      "query": "Which telemetry measurements are recorded?",
+      "relevant_urls": [
+        "https://example.org/harbor/telemetry"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-030",
+      "query": "What is required for a cost estimate?",
+      "relevant_urls": [
+        "https://example.org/harbor/telemetry"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-031",
+      "query": "How is missing pricing displayed?",
+      "relevant_urls": [
+        "https://example.org/harbor/telemetry"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-032",
+      "query": "Are credentials included in run traces?",
+      "relevant_urls": [
+        "https://example.org/harbor/telemetry"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-033",
+      "query": "Which Python version runs Harbor?",
+      "relevant_urls": [
+        "https://example.org/harbor/deployment"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-034",
+      "query": "Which port serves the browser application?",
+      "relevant_urls": [
+        "https://example.org/harbor/deployment"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-035",
+      "query": "Which port serves the REST API?",
+      "relevant_urls": [
+        "https://example.org/harbor/deployment"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-036",
+      "query": "What is required before public deployment?",
+      "relevant_urls": [
+        "https://example.org/harbor/deployment"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-037",
+      "query": "How long is report history stored?",
+      "relevant_urls": [
+        "https://example.org/harbor/retention"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-038",
+      "query": "Who can delete report history early?",
+      "relevant_urls": [
+        "https://example.org/harbor/retention"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-039",
+      "query": "When are source documents included in exports?",
+      "relevant_urls": [
+        "https://example.org/harbor/retention"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-040",
+      "query": "Do operational logs store full source text?",
+      "relevant_urls": [
+        "https://example.org/harbor/retention"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "dev-041",
+      "query": "What is Harbor annual subscription pricing?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-042",
+      "query": "What GPU hardware trains Harbor models?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-043",
+      "query": "What is Harbor CEO salary?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-044",
+      "query": "Which languages does Harbor translate?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-045",
+      "query": "How many customers use Harbor?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-046",
+      "query": "What is Harbor revenue?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-047",
+      "query": "Does Harbor guarantee zero hallucinations?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-048",
+      "query": "Which company acquired Harbor?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-049",
+      "query": "What is Harbor uptime SLA?",
+      "relevant_urls": [],
+      "answerable": false
+    },
+    {
+      "id": "dev-050",
+      "query": "What is Harbor carbon footprint?",
+      "relevant_urls": [],
+      "answerable": false
+    }
+  ]
+}
