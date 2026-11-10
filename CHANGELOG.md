@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 — Reusable retrieval and semantic benchmark
+
+- Reuse corpus statistics and embeddings across evaluation questions; reuse a pinned CPU encoder across requests without sharing document indexes.
+- Compare BM25, dense and reciprocal-rank hybrid retrieval with dataset/model/code provenance, setup/query timing and unanswerable retrieval counts.
+- Validate embedding dimensions and finite values; make hybrid score ties deterministic by passage ID.
+- Add optional semantic dependency pins and document measured quality and limitations.
+
 ## 0.4.0 — Runtime limits and CLI
 
 - Enforce a per-run model-call ceiling across planning, generation, format retries, citation repair and support review; callers can lower the operator limit.

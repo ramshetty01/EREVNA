@@ -123,7 +123,7 @@ if submitted:
             context = hashlib.sha256(
                 json.dumps(
                     [
-                        "pipeline-v0.4-budgets",
+                        "pipeline-v0.5-retrieval-index",
                         max_llm_calls,
                         verify_support,
                         source_mode,

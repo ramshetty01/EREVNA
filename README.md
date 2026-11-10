@@ -115,14 +115,15 @@ No report-writing stage is allowed to silently introduce new uncited prose.
 BM25 is available in the default installation, with no model download.
 
 ```sh
-pip install -r requirements-semantic.txt
+pip install -r requirements-semantic.lock
 python -m research.evaluate --method dense --output artifacts/dense-evaluation.json
 python -m research.evaluate --method hybrid --output artifacts/hybrid-evaluation.json
 ```
 
 Dense retrieval uses `sentence-transformers/all-MiniLM-L6-v2`; hybrid uses reciprocal-rank
-fusion. Installation and first use download the model. Ranking/fusion contracts are tested
-with fixed embeddings; the committed numerical results cover BM25 only, not dense/hybrid.
+fusion. Installation and first use download the model. The local CPU model is pinned to an exact revision and reused across requests. Corpus
+indexes remain local to each run. All methods have been measured on the authored fixture;
+BM25 remains the default. [Semantic benchmark and per-case results](docs/retrieval-benchmark.md).
 
 ## Evaluation — scope matters
 
@@ -218,7 +219,7 @@ Install Playwright separately before running it. Screenshots are in `docs/images
 - Prompt-injection instructions are treated as untrusted data, but this is not a guarantee of model compliance.
 - The browser uses a new session namespace on reload; it is not an account/authentication system.
 - Multi-user deployment needs authentication, per-user quotas, external persistence and an enforced network egress policy.
-- Dense/hybrid quality, public deployment, larger human-reviewed evaluation and production load testing remain future work.
+- Dense/hybrid results cover only the authored fixture; broader evaluation, public deployment, independent human review and production load testing remain future work.
 - The old individual analyst/report helpers remain for compatibility; the app and API use `research.pipeline`.
 
 [Remaining roadmap](docs/roadmap.md) · [Deployment notes](docs/deployment.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)

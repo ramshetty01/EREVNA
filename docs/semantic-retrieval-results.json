@@ -1,0 +1,3411 @@
+{
+  "dataset_sha256": "70aad80b1340cc55d774046df03f5a217b373ff227c5109b95251d81cee35472",
+  "dataset_description": "50 authored development cases over fictional Harbor documentation. Not a held-out or real-world accuracy benchmark. Repeated navigation intentionally tests retrieval beyond the old 500-character cutoff.",
+  "k": 3,
+  "implementation_sha256": "b0548614c8d28f21aab41340441f42c4ed8978ef459acb18d694b179b42bfffa",
+  "environment": {
+    "python": "3.12.13",
+    "system": "Darwin",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "2.5.4",
+      "sentence-transformers": "5.7.0",
+      "transformers": "5.22.2",
+      "torch": "2.15.0"
+    }
+  },
+  "protocol": "Top-k passages, then deduplicated source URLs. Query latency excludes model loading and corpus indexing. Fixed query order; single local run, not production load.",
+  "passage_count": 13,
+  "metric": "Source-level recall@k and reciprocal rank; NOT answer correctness or factual support.",
+  "methods": {
+    "first_500_chars_bm25": {
+      "index_build_seconds": 0.000941,
+      "query_p50_ms": 0.024333,
+      "query_p95_ms": 0.043148,
+      "unanswerable_with_results": 10,
+      "source_recall_at_k": 0.55,
+      "mean_reciprocal_rank": 0.5333,
+      "answerable_cases": 40,
+      "unanswerable_cases": 10,
+      "seconds": 0.01,
+      "cases": [
+        {
+          "id": "dev-001",
+          "query": "Which HTTP codes trigger Harbor retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.093083,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-002",
+          "query": "How many times does Harbor retry a failed request?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.053875,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-003",
+          "query": "What delay strategy does Harbor use for retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.045042,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-004",
+          "query": "What takes precedence over the calculated retry delay?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1"
+          ],
+          "query_ms": 0.027667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-005",
+          "query": "When do Harbor cached reports expire?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.03825,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "id": "dev-006",
+          "query": "How are cached reports isolated?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.014459,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-007",
+          "query": "How can a user bypass the Harbor cache?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S1-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.039042,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-008",
+          "query": "What happens to cached reports when a workspace is deleted?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.025417,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-009",
+          "query": "Which document formats does Harbor ingest?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S1-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.03875,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-010",
+          "query": "What is the document upload limit?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1"
+          ],
+          "query_ms": 0.017083,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-011",
+          "query": "Are encrypted PDFs supported by Harbor ingestion?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S1-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.040833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-012",
+          "query": "Which source metadata does document ingestion record?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1"
+          ],
+          "query_ms": 0.023375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-013",
+          "query": "What is the Harbor passage size?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S1-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.033625,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-014",
+          "query": "How much overlap is used between passages?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.020667,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-015",
+          "query": "How does hybrid retrieval combine rankings?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1"
+          ],
+          "query_ms": 0.019292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-016",
+          "query": "What is the default evidence passage budget?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1"
+          ],
+          "query_ms": 0.019792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-017",
+          "query": "What evidence must accompany every finding?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.019917,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-018",
+          "query": "What happens to unknown passage IDs?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1"
+          ],
+          "query_ms": 0.019,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-019",
+          "query": "What does quote matching check?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.013417,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-020",
+          "query": "Does citation quote matching prove logical support?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P1"
+          ],
+          "query_ms": 0.025291,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-021",
+          "query": "Which Harbor endpoint does not require authentication?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.039542,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-022",
+          "query": "How is the research API authenticated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1"
+          ],
+          "query_ms": 0.016583,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-023",
+          "query": "How many documents can a research API request contain?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1"
+          ],
+          "query_ms": 0.026125,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-024",
+          "query": "Which HTTP status signals invalid API input?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1"
+          ],
+          "query_ms": 0.025583,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-025",
+          "query": "Which IP ranges are blocked for page fetching?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.020958,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-026",
+          "query": "Are redirect destinations checked?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.013292,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-027",
+          "query": "How does the web fetcher handle DNS rebinding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P1"
+          ],
+          "query_ms": 0.02275,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-028",
+          "query": "Which protocols and ports does the web fetcher allow?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P1"
+          ],
+          "query_ms": 0.022625,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-029",
+          "query": "Which telemetry measurements are recorded?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1"
+          ],
+          "query_ms": 0.016042,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-030",
+          "query": "What is required for a cost estimate?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.014209,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-031",
+          "query": "How is missing pricing displayed?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.013709,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-032",
+          "query": "Are credentials included in run traces?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1"
+          ],
+          "query_ms": 0.019125,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-033",
+          "query": "Which Python version runs Harbor?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.03675,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-034",
+          "query": "Which port serves the browser application?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.017875,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-035",
+          "query": "Which port serves the REST API?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1"
+          ],
+          "query_ms": 0.019167,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-036",
+          "query": "What is required before public deployment?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1"
+          ],
+          "query_ms": 0.01925,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-037",
+          "query": "How long is report history stored?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1"
+          ],
+          "query_ms": 0.01925,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-038",
+          "query": "Who can delete report history early?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1"
+          ],
+          "query_ms": 0.022209,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-039",
+          "query": "When are source documents included in exports?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.017208,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-040",
+          "query": "Do operational logs store full source text?",
+          "answerable": true,
+          "retrieved_urls": [],
+          "retrieved_passage_ids": [],
+          "query_ms": 0.023208,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-041",
+          "query": "What is Harbor annual subscription pricing?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.037125,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-042",
+          "query": "What GPU hardware trains Harbor models?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.040333,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-043",
+          "query": "What is Harbor CEO salary?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.033833,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-044",
+          "query": "Which languages does Harbor translate?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.033375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-045",
+          "query": "How many customers use Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.036541,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-046",
+          "query": "What is Harbor revenue?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.030292,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-047",
+          "query": "Does Harbor guarantee zero hallucinations?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.036125,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-048",
+          "query": "Which company acquired Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.03325,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-049",
+          "query": "What is Harbor uptime SLA?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.033333,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-050",
+          "query": "What is Harbor carbon footprint?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.033167,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        }
+      ]
+    },
+    "bm25": {
+      "index_build_seconds": 0.000599,
+      "query_p50_ms": 0.033083,
+      "query_p95_ms": 0.051629,
+      "unanswerable_with_results": 10,
+      "source_recall_at_k": 1.0,
+      "mean_reciprocal_rank": 0.9875,
+      "answerable_cases": 40,
+      "unanswerable_cases": 10,
+      "seconds": 0.002,
+      "cases": [
+        {
+          "id": "dev-001",
+          "query": "Which HTTP codes trigger Harbor retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S6-P1",
+            "S7-P2"
+          ],
+          "query_ms": 0.059459,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-002",
+          "query": "How many times does Harbor retry a failed request?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S2-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.053167,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-003",
+          "query": "What delay strategy does Harbor use for retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S2-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.046917,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-004",
+          "query": "What takes precedence over the calculated retry delay?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1"
+          ],
+          "query_ms": 0.031667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-005",
+          "query": "When do Harbor cached reports expire?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.042208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-006",
+          "query": "How are cached reports isolated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1"
+          ],
+          "query_ms": 0.020292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-007",
+          "query": "How can a user bypass the Harbor cache?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.042458,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-008",
+          "query": "What happens to cached reports when a workspace is deleted?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.031417,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-009",
+          "query": "Which document formats does Harbor ingest?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S2-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.043208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-010",
+          "query": "What is the document upload limit?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1"
+          ],
+          "query_ms": 0.020042,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-011",
+          "query": "Are encrypted PDFs supported by Harbor ingestion?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S2-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.045625,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-012",
+          "query": "Which source metadata does document ingestion record?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S10-P1"
+          ],
+          "query_ms": 0.029792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-013",
+          "query": "What is the Harbor passage size?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 0.03975,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-014",
+          "query": "How much overlap is used between passages?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1"
+          ],
+          "query_ms": 0.028167,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-015",
+          "query": "How does hybrid retrieval combine rankings?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1"
+          ],
+          "query_ms": 0.023708,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-016",
+          "query": "What is the default evidence passage budget?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S5-P2",
+            "S5-P1"
+          ],
+          "query_ms": 0.027791,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-017",
+          "query": "What evidence must accompany every finding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 0.029666,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-018",
+          "query": "What happens to unknown passage IDs?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S8-P2"
+          ],
+          "query_ms": 0.033542,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-019",
+          "query": "What does quote matching check?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S9-P1"
+          ],
+          "query_ms": 0.023458,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-020",
+          "query": "Does citation quote matching prove logical support?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1"
+          ],
+          "query_ms": 0.033208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-021",
+          "query": "Which Harbor endpoint does not require authentication?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S9-P1",
+            "S5-P2"
+          ],
+          "query_ms": 0.04975,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-022",
+          "query": "How is the research API authenticated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S2-P1",
+            "S9-P1"
+          ],
+          "query_ms": 0.024167,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-023",
+          "query": "How many documents can a research API request contain?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.042083,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-024",
+          "query": "Which HTTP status signals invalid API input?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S8-P2",
+            "S8-P1"
+          ],
+          "query_ms": 0.043667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-025",
+          "query": "Which IP ranges are blocked for page fetching?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 0.029667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-026",
+          "query": "Are redirect destinations checked?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 0.021166,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-027",
+          "query": "How does the web fetcher handle DNS rebinding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 0.029667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-028",
+          "query": "Which protocols and ports does the web fetcher allow?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 0.02975,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-029",
+          "query": "Which telemetry measurements are recorded?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1"
+          ],
+          "query_ms": 0.021208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-030",
+          "query": "What is required for a cost estimate?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1"
+          ],
+          "query_ms": 0.021792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-031",
+          "query": "How is missing pricing displayed?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.263,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-032",
+          "query": "Are credentials included in run traces?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S10-P1",
+            "S8-P1"
+          ],
+          "query_ms": 0.030667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-033",
+          "query": "Which Python version runs Harbor?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S2-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.0415,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-034",
+          "query": "Which port serves the browser application?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1"
+          ],
+          "query_ms": 0.023958,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-035",
+          "query": "Which port serves the REST API?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.025375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-036",
+          "query": "What is required before public deployment?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 0.027541,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-037",
+          "query": "How long is report history stored?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.0255,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-038",
+          "query": "Who can delete report history early?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.028958,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-039",
+          "query": "When are source documents included in exports?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.029334,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-040",
+          "query": "Do operational logs store full source text?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.034,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-041",
+          "query": "What is Harbor annual subscription pricing?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.043417,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-042",
+          "query": "What GPU hardware trains Harbor models?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.0455,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-043",
+          "query": "What is Harbor CEO salary?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.037166,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-044",
+          "query": "Which languages does Harbor translate?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.037625,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-045",
+          "query": "How many customers use Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S2-P1",
+            "S3-P1"
+          ],
+          "query_ms": 0.040666,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-046",
+          "query": "What is Harbor revenue?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.032958,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-047",
+          "query": "Does Harbor guarantee zero hallucinations?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S2-P1"
+          ],
+          "query_ms": 0.043375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-048",
+          "query": "Which company acquired Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.037041,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-049",
+          "query": "What is Harbor uptime SLA?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.037084,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-050",
+          "query": "What is Harbor carbon footprint?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S6-P1"
+          ],
+          "query_ms": 0.038208,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        }
+      ]
+    },
+    "dense": {
+      "index_build_seconds": 0.36425,
+      "query_p50_ms": 6.095854,
+      "query_p95_ms": 7.426833,
+      "unanswerable_with_results": 10,
+      "source_recall_at_k": 0.95,
+      "mean_reciprocal_rank": 0.8917,
+      "answerable_cases": 40,
+      "unanswerable_cases": 10,
+      "seconds": 0.315,
+      "cases": [
+        {
+          "id": "dev-001",
+          "query": "Which HTTP codes trigger Harbor retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S7-P1",
+            "S9-P1"
+          ],
+          "query_ms": 9.312292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-002",
+          "query": "How many times does Harbor retry a failed request?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S9-P1",
+            "S7-P1"
+          ],
+          "query_ms": 7.410792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-003",
+          "query": "What delay strategy does Harbor use for retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S9-P1",
+            "S2-P1"
+          ],
+          "query_ms": 6.278125,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-004",
+          "query": "What takes precedence over the calculated retry delay?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S7-P2",
+            "S8-P2"
+          ],
+          "query_ms": 6.150833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-005",
+          "query": "When do Harbor cached reports expire?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.232083,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-006",
+          "query": "How are cached reports isolated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S8-P2"
+          ],
+          "query_ms": 5.985792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-007",
+          "query": "How can a user bypass the Harbor cache?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S7-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.067,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-008",
+          "query": "What happens to cached reports when a workspace is deleted?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.814,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-009",
+          "query": "Which document formats does Harbor ingest?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S4-P1",
+            "S10-P1"
+          ],
+          "query_ms": 6.034041,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-010",
+          "query": "What is the document upload limit?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S4-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.01825,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-011",
+          "query": "Are encrypted PDFs supported by Harbor ingestion?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S6-P1",
+            "S7-P1"
+          ],
+          "query_ms": 7.439958,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-012",
+          "query": "Which source metadata does document ingestion record?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S4-P1",
+            "S3-P1"
+          ],
+          "query_ms": 6.244667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "id": "dev-013",
+          "query": "What is the Harbor passage size?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S8-P1",
+            "S4-P1"
+          ],
+          "query_ms": 5.931416,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "id": "dev-014",
+          "query": "How much overlap is used between passages?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S5-P1",
+            "S5-P2"
+          ],
+          "query_ms": 6.059083,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-015",
+          "query": "How does hybrid retrieval combine rankings?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S2-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.093958,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-016",
+          "query": "What is the default evidence passage budget?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S4-P1",
+            "S8-P1"
+          ],
+          "query_ms": 6.105791,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-017",
+          "query": "What evidence must accompany every finding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P1",
+            "S5-P2",
+            "S4-P1"
+          ],
+          "query_ms": 6.212,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-018",
+          "query": "What happens to unknown passage IDs?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.023708,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-019",
+          "query": "What does quote matching check?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S8-P2"
+          ],
+          "query_ms": 5.892459,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-020",
+          "query": "Does citation quote matching prove logical support?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.151834,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-021",
+          "query": "Which Harbor endpoint does not require authentication?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S9-P1",
+            "S7-P1"
+          ],
+          "query_ms": 5.8835,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-022",
+          "query": "How is the research API authenticated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S9-P1",
+            "S8-P1"
+          ],
+          "query_ms": 6.090833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-023",
+          "query": "How many documents can a research API request contain?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S4-P1",
+            "S3-P1"
+          ],
+          "query_ms": 6.172708,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-024",
+          "query": "Which HTTP status signals invalid API input?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S1-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.09775,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-025",
+          "query": "Which IP ranges are blocked for page fetching?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.589334,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-026",
+          "query": "Are redirect destinations checked?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 5.979459,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-027",
+          "query": "How does the web fetcher handle DNS rebinding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.775833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-028",
+          "query": "Which protocols and ports does the web fetcher allow?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.342375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-029",
+          "query": "Which telemetry measurements are recorded?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S8-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.32075,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-030",
+          "query": "What is required for a cost estimate?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S5-P2"
+          ],
+          "query_ms": 6.239416,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-031",
+          "query": "How is missing pricing displayed?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.068667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-032",
+          "query": "Are credentials included in run traces?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.048292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-033",
+          "query": "Which Python version runs Harbor?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P1",
+            "S8-P1"
+          ],
+          "query_ms": 5.72325,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-034",
+          "query": "Which port serves the browser application?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 6.292875,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-035",
+          "query": "Which port serves the REST API?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P1",
+            "S7-P2"
+          ],
+          "query_ms": 5.981667,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-036",
+          "query": "What is required before public deployment?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S8-P2",
+            "S3-P1"
+          ],
+          "query_ms": 5.891084,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0
+        },
+        {
+          "id": "dev-037",
+          "query": "How long is report history stored?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1",
+            "S4-P1"
+          ],
+          "query_ms": 5.94225,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-038",
+          "query": "Who can delete report history early?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1",
+            "S8-P1"
+          ],
+          "query_ms": 5.990459,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-039",
+          "query": "When are source documents included in exports?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1",
+            "S8-P1"
+          ],
+          "query_ms": 5.717792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-040",
+          "query": "Do operational logs store full source text?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S5-P1",
+            "S8-P1"
+          ],
+          "query_ms": 5.866292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-041",
+          "query": "What is Harbor annual subscription pricing?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S9-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.001375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-042",
+          "query": "What GPU hardware trains Harbor models?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S8-P2",
+            "S9-P1"
+          ],
+          "query_ms": 6.270375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-043",
+          "query": "What is Harbor CEO salary?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S8-P2",
+            "S9-P1"
+          ],
+          "query_ms": 6.008,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-044",
+          "query": "Which languages does Harbor translate?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P1",
+            "S3-P1"
+          ],
+          "query_ms": 6.268459,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-045",
+          "query": "How many customers use Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S1-P1",
+            "S8-P1"
+          ],
+          "query_ms": 6.007541,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-046",
+          "query": "What is Harbor revenue?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S10-P1",
+            "S9-P1"
+          ],
+          "query_ms": 5.9525,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-047",
+          "query": "Does Harbor guarantee zero hallucinations?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S6-P1",
+            "S7-P1"
+          ],
+          "query_ms": 6.351083,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-048",
+          "query": "Which company acquired Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P1",
+            "S10-P1"
+          ],
+          "query_ms": 6.111291,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-049",
+          "query": "What is Harbor uptime SLA?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S8-P1",
+            "S1-P1"
+          ],
+          "query_ms": 7.633667,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-050",
+          "query": "What is Harbor carbon footprint?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1",
+            "S8-P1"
+          ],
+          "query_ms": 6.935375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        }
+      ]
+    },
+    "hybrid": {
+      "index_build_seconds": 0.202297,
+      "query_p50_ms": 6.678501,
+      "query_p95_ms": 7.177496,
+      "unanswerable_with_results": 10,
+      "source_recall_at_k": 1.0,
+      "mean_reciprocal_rank": 0.9625,
+      "answerable_cases": 40,
+      "unanswerable_cases": 10,
+      "seconds": 0.337,
+      "cases": [
+        {
+          "id": "dev-001",
+          "query": "Which HTTP codes trigger Harbor retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S6-P1",
+            "S7-P1"
+          ],
+          "query_ms": 7.343166,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-002",
+          "query": "How many times does Harbor retry a failed request?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S2-P1",
+            "S6-P1"
+          ],
+          "query_ms": 7.355042,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-003",
+          "query": "What delay strategy does Harbor use for retries?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S2-P1",
+            "S9-P1"
+          ],
+          "query_ms": 7.159208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-004",
+          "query": "What takes precedence over the calculated retry delay?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S7-P2",
+            "S8-P2"
+          ],
+          "query_ms": 6.839542,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-005",
+          "query": "When do Harbor cached reports expire?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S1-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.797166,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-006",
+          "query": "How are cached reports isolated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S8-P2"
+          ],
+          "query_ms": 6.612875,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-007",
+          "query": "How can a user bypass the Harbor cache?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S6-P1",
+            "S10-P1"
+          ],
+          "query_ms": 7.192459,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-008",
+          "query": "What happens to cached reports when a workspace is deleted?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S10-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.918,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-009",
+          "query": "Which document formats does Harbor ingest?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S4-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.703917,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-010",
+          "query": "What is the document upload limit?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S4-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.686209,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-011",
+          "query": "Are encrypted PDFs supported by Harbor ingestion?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S6-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.86375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-012",
+          "query": "Which source metadata does document ingestion record?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.670792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-013",
+          "query": "What is the Harbor passage size?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S9-P1",
+            "S3-P1"
+          ],
+          "query_ms": 6.705708,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-014",
+          "query": "How much overlap is used between passages?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S5-P1",
+            "S5-P2"
+          ],
+          "query_ms": 6.693916,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-015",
+          "query": "How does hybrid retrieval combine rankings?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S2-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.652833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-016",
+          "query": "What is the default evidence passage budget?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retrieval",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S4-P1",
+            "S5-P2",
+            "S5-P1"
+          ],
+          "query_ms": 6.463792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-017",
+          "query": "What evidence must accompany every finding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P1",
+            "S4-P1",
+            "S5-P2"
+          ],
+          "query_ms": 6.649917,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-018",
+          "query": "What happens to unknown passage IDs?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.7275,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-019",
+          "query": "What does quote matching check?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.595833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-020",
+          "query": "Does citation quote matching prove logical support?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/citations",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S5-P2",
+            "S5-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.654208,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-021",
+          "query": "Which Harbor endpoint does not require authentication?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S9-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.647542,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-022",
+          "query": "How is the research API authenticated?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S9-P1",
+            "S2-P1"
+          ],
+          "query_ms": 6.645959,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-023",
+          "query": "How many documents can a research API request contain?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S10-P1",
+            "S4-P1"
+          ],
+          "query_ms": 7.012584,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-024",
+          "query": "Which HTTP status signals invalid API input?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S6-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.470792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-025",
+          "query": "Which IP ranges are blocked for page fetching?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.74025,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-026",
+          "query": "Are redirect destinations checked?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.62475,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-027",
+          "query": "How does the web fetcher handle DNS rebinding?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.868583,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-028",
+          "query": "Which protocols and ports does the web fetcher allow?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.841084,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-029",
+          "query": "Which telemetry measurements are recorded?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S8-P2",
+            "S10-P1"
+          ],
+          "query_ms": 6.619833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-030",
+          "query": "What is required for a cost estimate?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S5-P2"
+          ],
+          "query_ms": 6.6305,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-031",
+          "query": "How is missing pricing displayed?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.451542,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-032",
+          "query": "Are credentials included in run traces?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P2",
+            "S8-P1",
+            "S10-P1"
+          ],
+          "query_ms": 6.72575,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-033",
+          "query": "Which Python version runs Harbor?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/cache"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S3-P1",
+            "S2-P1"
+          ],
+          "query_ms": 6.874375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-034",
+          "query": "Which port serves the browser application?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S7-P2",
+            "S7-P1"
+          ],
+          "query_ms": 6.6535,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-035",
+          "query": "Which port serves the REST API?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/security"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S6-P1",
+            "S7-P1"
+          ],
+          "query_ms": 6.594833,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-036",
+          "query": "What is required before public deployment?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/security",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S7-P2",
+            "S7-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.408375,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "id": "dev-037",
+          "query": "How long is report history stored?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.405292,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-038",
+          "query": "Who can delete report history early?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/telemetry"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S2-P1",
+            "S8-P1"
+          ],
+          "query_ms": 6.806792,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-039",
+          "query": "When are source documents included in exports?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.846084,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-040",
+          "query": "Do operational logs store full source text?",
+          "answerable": true,
+          "retrieved_urls": [
+            "https://example.org/harbor/retention",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/citations"
+          ],
+          "retrieved_passage_ids": [
+            "S10-P1",
+            "S3-P1",
+            "S5-P1"
+          ],
+          "query_ms": 6.587209,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "id": "dev-041",
+          "query": "What is Harbor annual subscription pricing?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S8-P1",
+            "S8-P2",
+            "S6-P1"
+          ],
+          "query_ms": 6.45125,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-042",
+          "query": "What GPU hardware trains Harbor models?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retries"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S1-P1"
+          ],
+          "query_ms": 6.456375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-043",
+          "query": "What is Harbor CEO salary?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S6-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.779166,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-044",
+          "query": "Which languages does Harbor translate?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S9-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.905542,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-045",
+          "query": "How many customers use Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/api"
+          ],
+          "retrieved_passage_ids": [
+            "S1-P1",
+            "S9-P1",
+            "S6-P1"
+          ],
+          "query_ms": 6.703917,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-046",
+          "query": "What is Harbor revenue?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retrieval"
+          ],
+          "retrieved_passage_ids": [
+            "S3-P1",
+            "S2-P1",
+            "S4-P1"
+          ],
+          "query_ms": 6.467458,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-047",
+          "query": "Does Harbor guarantee zero hallucinations?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/api",
+            "https://example.org/harbor/telemetry",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S6-P1",
+            "S8-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.886,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-048",
+          "query": "Which company acquired Harbor?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/deployment",
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion"
+          ],
+          "retrieved_passage_ids": [
+            "S9-P1",
+            "S2-P1",
+            "S3-P1"
+          ],
+          "query_ms": 6.6085,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-049",
+          "query": "What is Harbor uptime SLA?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/retries",
+            "https://example.org/harbor/deployment"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S1-P1",
+            "S9-P1"
+          ],
+          "query_ms": 6.54375,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        },
+        {
+          "id": "dev-050",
+          "query": "What is Harbor carbon footprint?",
+          "answerable": false,
+          "retrieved_urls": [
+            "https://example.org/harbor/cache",
+            "https://example.org/harbor/ingestion",
+            "https://example.org/harbor/retention"
+          ],
+          "retrieved_passage_ids": [
+            "S2-P1",
+            "S3-P1",
+            "S10-P1"
+          ],
+          "query_ms": 6.491542,
+          "recall_at_k": null,
+          "reciprocal_rank": null
+        }
+      ]
+    }
+  },
+  "embedding": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "device": "cpu",
+    "model_load_seconds": 113.784939,
+    "note": "Model load may use cached files; download is not separately timed. Text only is embedded; BM25 includes titles.",
+    "max_sequence_tokens": 256,
+    "passages_over_token_limit": 0
+  }
+}

@@ -18,7 +18,8 @@ passing these steps does not make the application production-ready automatically
 - [ ] Investigate supported verdicts whose reasons describe contradiction. Preserve the existing failure cases; validate any fix on newly authored cases, not just the known evaluation set.
 - [ ] Obtain independent human labels and adjudicate disagreements. The exported blind CSV supports this; assistant-authored labels do not satisfy this step.
 - [ ] Evaluate narrowed claims separately and collect permissioned, diverse real documentation.
-- [ ] Install and benchmark optional dense/hybrid retrieval; current numerical retrieval results cover BM25 only.
+- [x] Install and benchmark optional dense/hybrid retrieval on the authored fixture; BM25 remains the default. See [comparison](retrieval-benchmark.md).
+- [ ] Repeat retrieval comparisons on independent, diverse documentation.
 
 ## Next: shared deployment
 
