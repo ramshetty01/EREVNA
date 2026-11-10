@@ -1,216 +1,237 @@
+"""EREVNA: inspectable evidence-backed research, powered by a shared pipeline."""
+
+import hashlib
+import json
+import uuid
+from pathlib import Path
+from typing import Any
+
 import streamlit as st
 
+from agents.llm_backend import get_mode, mode_label, model_name
+from agents.memory_agent import MemoryAgent
 from agents.plan_schema import format_plan
-from agents.planner_agent import planner_agent
-from agents.search_agent import search_agent
-from agents.analyst_agent import analyst_agent
-from agents.report_agent import report_agent
-from agents.llm_backend import get_mode, mode_label
-from utils.logger import AgentLogger
-from utils.ui import (
-    inject_styles,
-    render_greeting,
-    render_mode_badge,
-    render_quick_actions,
-    render_pipeline_inline,
-    render_user_query,
-    render_search_results,
-    render_cache_prompt,
-    render_sidebar,
+from research.models import Document, ResearchResult
+from research.pipeline import ResearchError, run_research
+from tools.web_search import scrape_page
+
+ROOT = Path(__file__).parent
+st.set_page_config(page_title="EREVNA | Evidence-backed research", page_icon="◈", layout="wide")
+st.markdown(
+    """<style>
+.stApp {background:#f6f3ec;color:#21352f}
+h1,h2,h3 {font-family:Georgia,serif!important;letter-spacing:-.035em}
+h1 {font-size:3.7rem!important;font-weight:500!important;line-height:1.08!important;max-width:850px}
+.block-container {max-width:1180px;padding-top:2.5rem;padding-bottom:4rem}
+[data-testid="stSidebar"] {background:#e9e8df;border-right:1px solid #d0d5ca}
+[data-testid="stMetric"] {border-top:1px solid #b5c1b7;padding-top:1rem}
+[data-testid="stMetricValue"] {font-family:Georgia,serif;font-size:1.8rem}
+.stButton>button[kind="primary"] {background:#245b49;border:0;color:white}
+[data-testid="stCaptionContainer"] {color:#52655d}
+@media(max-width:650px){h1{font-size:2.6rem!important}.block-container{padding-top:1.5rem}}
+</style>""",
+    unsafe_allow_html=True,
 )
 
-st.set_page_config(
-    page_title="EREVNA",
-    page_icon="✦",
-    layout="centered",
-    initial_sidebar_state="collapsed",
-)
-
-_DEFAULTS = {
-    "history": [],
-    "memory": None,
-    "pending_query": None,
-    "cached_match": None,
-    "query_input": "",
-    "last_result": None,
-    "view_history_idx": None,
-    "auto_run_query": None,
+defaults: dict[str, Any] = {
+    "session_id": uuid.uuid4().hex,
+    "runs": [],
+    "selected_run": None,
+    "cache_notice": False,
 }
-for key, val in _DEFAULTS.items():
+for key, value in defaults.items():
     if key not in st.session_state:
-        st.session_state[key] = val
+        st.session_state[key] = value
 
-inject_styles()
-logger = AgentLogger()
-
-
-def get_memory():
-    if st.session_state.memory is None:
-        from agents.memory_agent import MemoryAgent
-        st.session_state.memory = MemoryAgent()
-    return st.session_state.memory
-
-
-def _slug(text: str) -> str:
-    return text[:30].replace(" ", "_").replace("/", "-")
-
-
-def run_pipeline(user_query: str, *, cached: bool = False) -> None:
-    render_user_query(user_query)
-    progress = st.progress(0, text="Thinking…")
-
-    render_pipeline_inline("plan", [])
-    with st.spinner(None):
-        plan = planner_agent(user_query)
-        plan_md = format_plan(plan)
-        progress.progress(25, text="Searching the web…")
-
-    render_pipeline_inline("search", ["plan"])
-    with st.spinner(None):
-        search_results = search_agent(user_query, plan)
-        progress.progress(50, text="Analyzing…")
-
-    render_pipeline_inline("analyze", ["plan", "search"])
-    with st.spinner(None):
-        analysis = analyst_agent(search_results, plan, task=user_query)
-        progress.progress(75, text="Writing report…")
-
-    render_pipeline_inline("report", ["plan", "search", "analyze"])
-    with st.spinner(None):
-        report = report_agent(user_query, analysis, plan)
-        progress.progress(100, text="Done")
-
-    render_pipeline_inline(None, ["plan", "search", "analyze", "report"])
-    progress.empty()
-
-    st.session_state.last_result = {
-        "query": user_query,
-        "plan_md": plan_md,
-        "search_results": search_results,
-        "analysis": analysis,
-        "report": report,
-        "cached": cached,
-        "_query_shown": True,
-    }
-    st.session_state.view_history_idx = None
-
-    get_memory().save(user_query, report)
-    logger.log(
-        user_query, plan_md, analysis, report,
-        cached=cached,
-        source_count=len(search_results.get("web_results", [])),
+with st.sidebar:
+    st.markdown("### EREVNA")
+    st.caption("A research notebook with evidence you can inspect.")
+    st.divider()
+    source_mode = st.radio("Research sources", ["Bundled example", "Live web", "Specific URLs"])
+    st.caption(
+        "The bundled example uses fictional Harbor product documentation. It is a reproducible development fixture."
     )
-    st.session_state.history.append({"query": user_query, "report": report})
+    method = st.selectbox("Retrieval method", ["bm25", "dense", "hybrid"])
+    if method != "bm25":
+        st.caption("Dense and hybrid retrieval require the optional local embedding model.")
+    fresh = st.checkbox("Run fresh — bypass saved results", value=False)
+    st.divider()
+    st.caption(mode_label())
+    st.caption("Saved results expire after 24 hours and are isolated to this browser session.")
+    if st.button("New research", use_container_width=True):
+        st.session_state.selected_run = None
+        st.session_state.cache_notice = False
+    if st.session_state.runs:
+        st.markdown("#### Recent research")
+        for item in reversed(st.session_state.runs[-10:]):
+            if st.button(
+                item["query"][:48], key=f"history-{item['run_id']}", use_container_width=True
+            ):
+                st.session_state.selected_run = item
+                st.session_state.cache_notice = False
+    st.link_button("View source on GitHub", "https://github.com/ramshetty01/EREVNA")
 
+st.caption("RESEARCH / EVIDENCE / ACCOUNTABILITY")
+st.title("Evidence, before answers.")
+st.write("Ask a question. Read the findings. Follow each citation back to the exact passage.")
+with st.form("research_form"):
+    default = (
+        "How does Harbor check citations, and what do those checks not prove?"
+        if source_mode == "Bundled example"
+        else ""
+    )
+    question = st.text_input(
+        "Research question",
+        value=default,
+        placeholder="What would you like to understand?",
+        max_chars=1500,
+    )
+    urls_text = (
+        st.text_area(
+            "Source URLs — one per line, up to six", placeholder="https://docs.example.com/guide"
+        )
+        if source_mode == "Specific URLs"
+        else ""
+    )
+    submitted = st.form_submit_button("Start research", type="primary")
 
-def show_cached_report(user_query: str, cached: dict) -> None:
-    render_user_query(user_query)
-    st.session_state.last_result = {
-        "query": user_query,
-        "plan_md": "",
-        "search_results": {},
-        "analysis": "",
-        "report": cached["report"],
-        "cached": True,
-        "_query_shown": True,
-    }
-    st.session_state.view_history_idx = None
-    logger.log(user_query, "", "", cached["report"], cached=True)
-    st.session_state.history.append({"query": user_query, "report": cached["report"]})
+if submitted:
+    st.session_state.cache_notice = False
+    st.session_state.selected_run = None
+    if not question.strip():
+        st.warning("Enter a research question first.")
+    else:
+        try:
+            documents = None
+            if source_mode == "Bundled example":
+                data = json.loads((ROOT / "data/development_set.json").read_text())
+                documents = [Document(**d) for d in data["documents"]]
+            context = hashlib.sha256(
+                json.dumps(
+                    [
+                        source_mode,
+                        urls_text,
+                        method,
+                        get_mode(),
+                        model_name(),
+                        [d.model_dump(exclude={"fetched_at"}) for d in documents]
+                        if documents is not None
+                        else None,
+                    ],
+                    sort_keys=True,
+                ).encode()
+            ).hexdigest()
+            memory = MemoryAgent(
+                str(ROOT / "database/memory.db"), namespace=st.session_state.session_id
+            )
+            cached = None if fresh else memory.get_similar(question, context=context)
+            if cached and cached.get("payload"):
+                result = ResearchResult.model_validate(cached["payload"])
+                st.session_state.cache_notice = True
+            else:
+                with st.status("Research in progress", expanded=True) as status:
+                    if source_mode == "Specific URLs":
+                        urls = list(
+                            dict.fromkeys(u.strip() for u in urls_text.splitlines() if u.strip())
+                        )
+                        if not 1 <= len(urls) <= 6:
+                            raise ValueError("Provide between one and six source URLs.")
+                        documents = []
+                        for url in urls:
+                            text = scrape_page(url)
+                            if text:
+                                documents.append(
+                                    Document(title=url, url=url, text=text, status="page")
+                                )
+                            else:
+                                st.warning(f"Could not read this source: {url}")
+                    result = run_research(
+                        question,
+                        documents=documents,
+                        retrieval=method,
+                        progress=lambda stage: st.write(stage),
+                    )
+                    status.update(label="Research complete", state="complete", expanded=False)
+                memory.save(question, result.report, context=context, payload=result.model_dump())
+            st.session_state.selected_run = result.model_dump()
+            if not any(r["run_id"] == result.run_id for r in st.session_state.runs):
+                st.session_state.runs.append(result.model_dump())
+        except (ValueError, ResearchError) as exc:
+            st.error(str(exc))
+        except Exception:
+            st.error(
+                "The run could not be saved or completed. Please retry. Your API credential was not logged."
+            )
 
-
-def render_results(result: dict) -> None:
-    if not result.get("_query_shown"):
-        render_user_query(result["query"])
-
-    tabs = st.tabs(["Report", "Analysis", "Sources", "Plan"])
-    with tabs[0]:
-        st.markdown(result["report"])
+if st.session_state.selected_run:
+    result = ResearchResult.model_validate(st.session_state.selected_run)
+    if st.session_state.cache_notice:
+        st.info(
+            "Loaded a saved result from this session. Enable Run fresh to collect new evidence."
+        )
+    st.divider()
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Sources", result.metrics.source_count)
+    c2.metric("Evidence passages", result.metrics.passage_count)
+    c3.metric("Run time", f"{result.metrics.step_seconds.get('total', 0):.1f}s")
+    cost = result.metrics.estimated_cost_usd
+    c4.metric("Estimated cost", f"${cost:.5f}" if cost is not None else "Not configured")
+    report_tab, evidence_tab, plan_tab, run_tab = st.tabs(
+        ["Report", "Evidence", "Research plan", "Run details"]
+    )
+    with report_tab:
+        for warning in result.warnings:
+            st.warning(warning)
+        st.markdown(result.report)
         st.download_button(
             "Download report",
-            result["report"],
-            file_name=f"report_{_slug(result['query'])}.md",
+            result.report,
+            file_name=f"erevna-{result.run_id[:8]}.md",
             mime="text/markdown",
         )
-    with tabs[1]:
-        st.markdown(result["analysis"] if result.get("analysis") else "_No analysis data._")
-    with tabs[2]:
-        if result.get("search_results"):
-            render_search_results(result["search_results"])
-        else:
-            st.caption("No sources for this session.")
-    with tabs[3]:
-        st.markdown(result["plan_md"] if result.get("plan_md") else "_Loaded from cache._")
-
-
-def _submit_query(query: str) -> None:
-    query = query.strip()
-    if not query:
-        return
-    similar = get_memory().get_similar(query)
-    if similar:
-        st.session_state.pending_query = query
-        st.session_state.cached_match = similar
-    else:
-        run_pipeline(query)
-
-
-# ── Sidebar ────────────────────────────────────────────────────────────────
-render_sidebar(st.session_state.history, mode_label())
-
-# ── Main ───────────────────────────────────────────────────────────────────
-has_results = bool(st.session_state.last_result) or st.session_state.view_history_idx is not None
-
-render_mode_badge(get_mode(), mode_label())
-render_greeting(has_results)
-
-if not has_results and not st.session_state.pending_query:
-    render_quick_actions()
-
-# Chat input (bottom bar — ChatGPT style)
-prompt = st.chat_input("Ask anything")
-
-if prompt:
-    _submit_query(prompt)
-
-if st.session_state.auto_run_query:
-    q = st.session_state.auto_run_query
-    st.session_state.auto_run_query = None
-    _submit_query(q)
-
-# Cache choice
-if st.session_state.pending_query and st.session_state.cached_match:
-    cached = st.session_state.cached_match
-    render_cache_prompt(cached["task"])
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("Use cached", type="primary", use_container_width=True):
-            show_cached_report(st.session_state.pending_query, cached)
-            st.session_state.pending_query = None
-            st.session_state.cached_match = None
-            st.rerun()
-    with c2:
-        if st.button("Run fresh", use_container_width=True):
-            query = st.session_state.pending_query
-            st.session_state.pending_query = None
-            st.session_state.cached_match = None
-            run_pipeline(query)
-
-# History view
-if st.session_state.view_history_idx is not None:
-    idx = st.session_state.view_history_idx
-    if 0 <= idx < len(st.session_state.history):
-        item = st.session_state.history[idx]
-        st.session_state.last_result = {
-            "query": item["query"],
-            "plan_md": "",
-            "search_results": {},
-            "analysis": "",
-            "report": item["report"],
-            "cached": False,
-            "_query_shown": False,
-        }
-
-# Results
-if st.session_state.last_result:
-    render_results(st.session_state.last_result)
+    with evidence_tab:
+        st.caption(
+            "These are the passages provided to the model. Quote checks verify text matches; they do not certify factual correctness."
+        )
+        for p in result.passages:
+            with st.expander(f"{p.id} · {p.title}", expanded=True):
+                st.write(p.text)
+                st.link_button("Open source", p.url)
+                st.caption(f"Retrieval score: {p.score:.4f}")
+        st.markdown("#### Source acquisition")
+        for doc in result.documents:
+            st.write(f"{doc.title} — {doc.status}")
+            st.caption(f"Acquired: {doc.fetched_at}")
+    with plan_tab:
+        st.markdown(format_plan(result.plan))
+        st.caption(
+            "A deterministic plan is used for provided documents; live-web mode can use model-generated planning."
+        )
+    with run_tab:
+        st.write(f"Run ID: {result.run_id}")
+        st.json(result.metrics.model_dump())
+        st.caption(
+            "Token counts reflect provider-reported usage. Dollar estimates require explicit model pricing. A JSON export includes the source text used in this run."
+        )
+        st.download_button(
+            "Download full run JSON",
+            result.model_dump_json(indent=2),
+            file_name=f"erevna-{result.run_id[:8]}.json",
+            mime="application/json",
+        )
+else:
+    st.divider()
+    left, right = st.columns([2, 1])
+    with left:
+        st.markdown("### Every finding has a trail.")
+        st.write(
+            "EREVNA retains source passages, asks for supporting quotations, and removes findings with invalid references or quotes that do not match. When evidence is insufficient, it says so."
+        )
+    with right:
+        st.markdown("### Start with an example")
+        st.write(
+            "Use the bundled documentation to explore retrieval, citations and exports without relying on live search."
+        )
+    st.caption(
+        "Citation checks establish traceability, not truth. Review the evidence before relying on a report."
+    )
